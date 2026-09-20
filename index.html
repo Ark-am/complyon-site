@@ -348,6 +348,22 @@
     .cta { font-size: .68rem; padding: .45rem .9rem; }
   }
 
+  /* Desktop (861px+): the bar has room to breathe, so scale the header up
+     from the shared base. Mobile and the 640-860px compact band are
+     untouched -- every other header rule below is max-width. */
+  @media (min-width: 861px) {
+    .bar { min-height: 88px; }
+    .logo { font-size: 1.6rem; }
+    .logo small { margin-top: 5px; font-size: .62rem; letter-spacing: .17em; }
+    nav ul { gap: 2rem; }
+    nav a { font-size: .82rem; }
+    .nav-group { gap: 2rem; }
+    .cta { font-size: .82rem; padding: .65rem 1.4rem; }
+    /* keep in sync with .bar min-height: the sticky header would otherwise
+       cover the top of whatever section a nav link jumps to */
+    [id] { scroll-margin-top: 88px; }
+  }
+
   /* narrow photo column (640-1000px): trim padding and quote size so the
      blockquote and "At a glance" values don't wrap to slivers */
   @media (min-width: 640px) and (max-width: 1000px) {

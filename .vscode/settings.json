@@ -1,0 +1,13 @@
+{
+  // dist/ is build output from `npm run build` and is git-ignored.
+  // Hiding it prevents accidentally editing the generated copy of
+  // index.html instead of the source at the project root.
+  "files.exclude": {
+    "dist": true
+  },
+  // keep it out of search results and Quick Open too
+  "search.exclude": {
+    "dist": true,
+    "node_modules": true
+  }
+}

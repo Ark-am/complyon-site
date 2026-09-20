@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ComplyOn LLC — Independent Compliance &amp; Risk Advisory</title>
+<meta name="theme-color" content="#3b2d6e">
+<meta name="description" content="ComplyOn LLC is an Atlanta-based independent compliance and risk advisory practice serving investment advisers, OCIOs, pension funds and digital asset firms.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 38'><path d='M2 3 L10 3 L16 0 L22 3 L30 3 L30 20 Q30 33 16 38 Q2 33 2 20 Z' fill='%234A3570'/><text x='16' y='19' text-anchor='middle' font-family='Georgia,serif' font-size='11' font-weight='700' fill='%23EDE8F7'>CO</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --deep:  #3b2d6e;
+    --mid:   #6b5ca5;
+    --light: #c4b5e8;
+    --pale:  #ede8f7;
+    --fog:   #f7f5fc;
+    --ink:   #1e1a2e;
+    --slate: #4a4460;
+    --muted: #8a82a4;
+    --gold:  #c9a96e;
+    --rule:  rgba(107, 92, 165, .18);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  body, h1, h2, h3, p, ul, figure { margin: 0; padding: 0; }
+  ul { list-style: none; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body { overflow-x: clip; }
+  img { max-width: 100%; }
+  /* grid children must be allowed to shrink below their min-content */
+  .grid > *, .hero-grid > *, .about > *, .contact-grid > * { min-width: 0; }
+
+  body {
+    font: 300 16px/1.7 'DM Sans', system-ui, sans-serif;
+    color: var(--ink);
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--deep); }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 72px 0; }
+  section:nth-of-type(even) { background: var(--fog); }
+
+  .tag {
+    font-size: .68rem; font-weight: 500; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--mid); margin-bottom: .75rem;
+  }
+  h2 {
+    font: 300 clamp(1.8rem, 4vw, 2.6rem)/1.2 var(--serif);
+    color: var(--deep); margin-bottom: 1rem;
+  }
+  h3 { font: 600 1.15rem/1.35 var(--serif); color: var(--deep); margin-bottom: .5rem; }
+  .lead { color: var(--slate); max-width: 62ch; }
+  .grid { display: grid; gap: 24px; }
+  .g2 { grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); }
+  .g3 { grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); }
+
+  /* ---------- header ---------- */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--deep);
+    border-bottom: 1px solid rgba(196, 181, 232, .15);
+  }
+  .bar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; min-height: 68px;
+  }
+  .logo {
+    font: 600 1.35rem/1 var(--serif);
+    letter-spacing: .04em; color: #fff; text-decoration: none;
+  }
+  .logo span { color: var(--light); }
+  /* same colour as the header background, so it reads as invisible */
+  .logo .ghost { color: var(--deep); }
+  .logo small {
+    display: block; margin-top: 3px;
+    font: 400 .56rem/1 'DM Sans', sans-serif;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+  }
+  nav ul { display: flex; flex-wrap: wrap; gap: 1.6rem; align-items: center; }
+  nav a {
+    font-size: .76rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--light); text-decoration: none;
+  }
+  nav a:hover { color: #fff; }
+  .nav-group { display: flex; align-items: center; gap: 1.6rem; }
+  .cta {
+    font-size: .76rem; font-weight: 500; letter-spacing: .12em;
+    text-transform: uppercase; text-decoration: none; white-space: nowrap;
+    background: var(--gold); color: var(--deep);
+    padding: .5rem 1.1rem; border-radius: 3px;
+  }
+  .cta:hover { background: #fff; }
+
+  /* ---------- hero ---------- */
+  .hero {
+    background: linear-gradient(135deg, #2a1f55, #3b2d6e 55%, #4e3d85);
+    color: #fff; padding: 88px 0;
+  }
+  .hero .tag { color: var(--gold); }
+  .hero h1 {
+    font: 300 clamp(1.95rem, 7vw, 3.8rem)/1.12 var(--serif);
+    margin-bottom: 1.25rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--light); }
+  .hero p { color: rgba(196, 181, 232, .85); max-width: 56ch; margin-bottom: 2rem; }
+  .hero strong { color: #fff; font-weight: 500; }
+  .btns { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-block; padding: .8rem 1.8rem; border-radius: 3px;
+    font-size: .76rem; font-weight: 500; letter-spacing: .1em;
+    text-transform: uppercase; text-decoration: none;
+    border: 1px solid transparent;
+  }
+  .btn-solid { background: var(--gold); color: var(--deep); }
+  .btn-solid:hover { background: #fff; }
+  .btn-ghost { border-color: rgba(196, 181, 232, .4); color: var(--light); }
+  .btn-ghost:hover { border-color: var(--light); color: #fff; }
+
+  .hero-grid {
+    display: grid; gap: 56px;
+    grid-template-columns: minmax(0, 1fr) 280px; align-items: center;
+  }
+  .stats {
+    display: grid; gap: 1.6rem; margin: 0; padding: 2rem 1.75rem;
+    border: 1px solid rgba(196, 181, 232, .28); border-radius: 4px;
+    background: rgba(255, 255, 255, .05);
+  }
+  .stats b { display: block; font: 300 2.2rem/1 var(--serif); color: #fff; }
+  .stats span {
+    font-size: .64rem; letter-spacing: .15em;
+    text-transform: uppercase; color: var(--muted);
+  }
+
+  .glance {
+    margin-top: 20px; border: 1px solid var(--rule);
+    border-radius: 4px; padding: 1.3rem 1.4rem;
+  }
+  .glance h3 {
+    font: 500 .66rem 'DM Sans', sans-serif; letter-spacing: .15em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 1rem;
+  }
+  .glance dl { display: grid; gap: .8rem; margin: 0; }
+  .glance dt {
+    font-size: .62rem; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: .1rem;
+  }
+  .glance dd { margin: 0; font-size: .84rem; line-height: 1.5; color: var(--deep); }
+
+  .steps { margin-top: 2.5rem; }
+  .steps h3 {
+    font: 500 .66rem 'DM Sans', sans-serif; letter-spacing: .15em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 1.2rem;
+  }
+  .steps ol { list-style: none; counter-reset: step; display: grid; gap: 1.1rem; }
+  .steps li { counter-increment: step; position: relative; padding-left: 46px; }
+  .steps li::before {
+    content: counter(step); position: absolute; left: 0; top: -2px;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--pale); color: var(--deep);
+    display: grid; place-items: center;
+    font: 500 .8rem 'DM Sans', sans-serif;
+  }
+  .steps b { display: block; font-weight: 500; font-size: .92rem; color: var(--deep); }
+  .steps span { font-size: .86rem; line-height: 1.6; color: var(--slate); }
+
+  /* ---------- about ---------- */
+  .about {
+    display: grid; align-items: start;
+    gap: clamp(24px, 3.5vw, 40px);
+    grid-template-columns: clamp(205px, 25vw, 320px) 1fr;
+  }
+  .card { background: var(--deep); border-radius: 4px; overflow: hidden; color: #fff; }
+  .card img { display: block; width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; object-position: center 20%; }
+  .card .body { padding: 1.75rem; }
+  .card blockquote {
+    font: 300 italic 1.3rem/1.5 var(--serif);
+    color: var(--light); margin: 0 0 1.25rem;
+  }
+  .card .name {
+    font-size: .78rem; font-weight: 500; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--gold);
+  }
+  .card .role { font-size: .78rem; color: var(--muted); }
+  .about p { color: var(--slate); margin-bottom: 1rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1.5rem; }
+  .chips li {
+    font-size: .68rem; font-weight: 500; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--deep); background: var(--pale);
+    padding: .35rem .8rem; border-radius: 3px; border-left: 2px solid var(--mid);
+  }
+
+  /* ---------- cards ---------- */
+  .box {
+    background: #fff; border: 1px solid var(--rule);
+    border-radius: 4px; padding: 1.75rem;
+  }
+  .box p, .box li { font-size: .9rem; color: var(--slate); }
+  .box ul { margin: .75rem 0 0; }
+  .box ul li { position: relative; padding-left: 1.1rem; margin-bottom: .35rem; }
+  .box ul li::before {
+    content: ""; position: absolute; left: 0; top: .6rem;
+    width: 5px; height: 5px; border-radius: 50%; background: var(--mid);
+  }
+  .box .fee {
+    margin-top: 1.25rem; padding-top: .9rem; border-top: 1px solid var(--rule);
+    font-size: .68rem; font-weight: 500; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--deep);
+  }
+  #engagements .box { display: flex; flex-direction: column; }
+  #engagements .box .fee { margin-top: auto; }
+  .box .kicker {
+    font-size: .64rem; font-weight: 500; letter-spacing: .15em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: .4rem;
+  }
+
+  /* ---------- timeline ---------- */
+  .experience { background: var(--deep); color: #fff; }
+  .experience h2 { color: #fff; }
+  .experience .tag { color: var(--gold); }
+  .experience .lead { color: rgba(196, 181, 232, .8); }
+  .timeline { border-left: 1px solid rgba(196, 181, 232, .3); padding-left: 28px; margin-top: 2.5rem; }
+  .job { position: relative; padding-bottom: 2.5rem; }
+  .job::before {
+    content: ""; position: absolute; left: -33px; top: .5rem;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--gold); border: 2px solid var(--deep);
+  }
+  .job .date {
+    font-size: .68rem; font-weight: 500; letter-spacing: .15em;
+    text-transform: uppercase; color: var(--gold);
+  }
+  .job h3 { color: #fff; margin: .25rem 0 .2rem; font-size: 1.25rem; }
+  .job .org { font-size: .84rem; color: var(--light); margin-bottom: .75rem; }
+  .job ul li {
+    font-size: .88rem; color: rgba(196, 181, 232, .78);
+    position: relative; padding-left: 1.1rem; margin-bottom: .4rem;
+  }
+  .job ul li::before {
+    content: ""; position: absolute; left: 0; top: .62rem;
+    width: 5px; height: 5px; border-radius: 50%; background: var(--gold);
+  }
+
+  /* ---------- industries ---------- */
+  .ind { text-align: center; }
+  .ind .box b {
+    display: block; font: 300 2rem/1 var(--serif);
+    color: var(--mid); margin-bottom: .6rem;
+  }
+  .ind .box strong {
+    display: block; font-size: .8rem; font-weight: 500; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--deep); margin-bottom: .4rem;
+  }
+  .ind .box p { font-size: .82rem; color: var(--muted); }
+
+  /* ---------- faq ---------- */
+  .faq { max-width: 780px; margin: 2rem auto 0; }
+  .faq details { border-bottom: 1px solid var(--rule); padding: 1.1rem 0; }
+  .faq summary {
+    font: 600 1.05rem/1.4 var(--serif); color: var(--deep);
+    cursor: pointer; list-style: none; display: flex; gap: 1rem;
+    justify-content: space-between; align-items: baseline;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; color: var(--mid); font-size: 1.3rem; line-height: 1; }
+  .faq details[open] summary::after { content: "\2013"; }
+  .faq p { margin-top: .75rem; font-size: .92rem; color: var(--slate); }
+
+  /* ---------- contact ---------- */
+  .contact-grid { display: grid; gap: 40px; grid-template-columns: 1fr 1fr; align-items: start; }
+  .detail { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 1.1rem; }
+  .detail .dot {
+    flex: 0 0 34px; height: 34px; border-radius: 50%; background: var(--pale);
+    display: grid; place-items: center; color: var(--mid);
+  }
+  .detail .dot svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; }
+  .detail dt {
+    font-size: .64rem; font-weight: 500; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .detail dd { margin: 0; font-size: .95rem; color: var(--deep); }
+
+  form { background: #fff; border: 1px solid var(--rule); border-radius: 4px; padding: 2rem; }
+  label {
+    display: block; font-size: .66rem; font-weight: 500; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: .4rem;
+  }
+  .field { margin-bottom: 1.1rem; }
+  input, select, textarea {
+    width: 100%; padding: .7rem .9rem; border: 1px solid var(--rule);
+    border-radius: 3px; font: 300 .92rem 'DM Sans', sans-serif;
+    color: var(--ink); background: #fff;
+  }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--mid); outline-offset: -1px; }
+  textarea { min-height: 110px; resize: vertical; }
+  .row { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+  button {
+    width: 100%; padding: .9rem; border: 0; border-radius: 3px; cursor: pointer;
+    background: var(--deep); color: #fff;
+    font: 500 .76rem 'DM Sans', sans-serif; letter-spacing: .12em; text-transform: uppercase;
+  }
+  button:hover { background: var(--mid); }
+  .note { font-size: .74rem; color: var(--muted); margin-top: .8rem; text-align: center; }
+
+  /* ---------- footer ---------- */
+  footer {
+    background: var(--deep); color: var(--muted);
+    padding: 2.5rem 0; font-size: .74rem;
+  }
+  footer .wrap {
+    display: flex; flex-wrap: wrap; gap: 1rem;
+    align-items: center; justify-content: space-between;
+  }
+  footer .logo { font-size: 1.1rem; }
+  .credit a {
+    color: var(--light); text-decoration: underline;
+    text-underline-offset: 2px; text-decoration-thickness: 1px;
+  }
+  .credit a:hover { color: #fff; }
+  footer nav ul { gap: 1.4rem; }
+
+  /* ---------- tablet ---------- */
+  @media (max-width: 860px) {
+    section { padding: 60px 0; }
+    .hero { padding: 68px 0; }
+    .hero-grid, .contact-grid { grid-template-columns: 1fr; }
+    .hero-grid { gap: 40px; }
+    .stats { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .card, .glance { max-width: 340px; }
+  }
+
+  /* Compact one-row header for the 640-860px band: unfolded foldables
+     (Z Fold 5 = 673px, Z Fold 6 = 686px) and small tablets. Desktop nav
+     metrics need 633px and only 625px is free at 673px, so tighten. */
+  @media (min-width: 640px) and (max-width: 860px) {
+    .logo { font-size: 1.25rem; }
+    .logo small { font-size: .54rem; letter-spacing: .13em; }
+    nav ul { gap: 1.5rem; }
+    nav a { font-size: .71rem; letter-spacing: .09em; }
+    .nav-group { gap: 1.5rem; }
+    .cta { font-size: .68rem; padding: .45rem .9rem; }
+  }
+
+  /* narrow photo column (640-1000px): trim padding and quote size so the
+     blockquote and "At a glance" values don't wrap to slivers */
+  @media (min-width: 640px) and (max-width: 1000px) {
+    .card .body { padding: 1.25rem 1.3rem 1.4rem; }
+    .card blockquote { font-size: 1.1rem; margin-bottom: 1rem; }
+    .glance { padding: 1.1rem 1.15rem; }
+    .glance dd { font-size: .8rem; }
+  }
+
+  /* ---------- one row down to 640px, stacked below ---------- */
+  @media (max-width: 639px) {
+    .about { grid-template-columns: 1fr; }
+    header { position: static; }
+    /* logo left + Contact top-right on row 1, nav links across row 2 */
+    .bar {
+      display: grid; grid-template-columns: 1fr auto;
+      align-items: center; gap: 6px 12px; padding: 12px 24px;
+    }
+    .nav-group { display: contents; }
+    .logo { grid-column: 1; grid-row: 1; justify-self: start; }
+    .cta { grid-column: 2; grid-row: 1; justify-self: end; }
+    nav { grid-column: 1 / -1; grid-row: 2; }
+    nav ul { justify-content: space-between; gap: .35rem .6rem; }
+    nav a { font-size: .72rem; display: inline-block; padding: .5rem 0; }
+    .cta { font-size: .7rem; padding: .5rem 1rem; }
+  }
+
+  /* ---------- phone ---------- */
+  @media (max-width: 560px) {
+    section { padding: 48px 0; }
+    .hero { padding: 52px 0; }
+    .lead, .section-lead { margin-bottom: 0; }
+    .row { grid-template-columns: 1fr; }
+    .card, .glance { max-width: none; }
+
+    /* compact stats: shrinking the label metrics keeps min-content
+       under the viewport, which is what caused overflow at 320px */
+    .stats { gap: .5rem; padding: 1.3rem 1rem; }
+    .stats b { font-size: 1.85rem; }
+    .stats span { font-size: .56rem; letter-spacing: .07em; }
+
+    form { padding: 1.4rem; }
+    /* 16px minimum stops iOS Safari zooming in on focus */
+    input, select, textarea { font-size: 16px; padding: .8rem .85rem; }
+    button { padding: 1rem; }
+
+    .timeline { padding-left: 22px; }
+    .job { padding-bottom: 2rem; }
+    .steps li { padding-left: 42px; }
+    footer .wrap { justify-content: flex-start; gap: 1.2rem; }
+  }
+
+  /* below ~450px the two hero buttons already wrap, so make them
+     full-width for a cleaner edge and a bigger tap target */
+  @media (max-width: 450px) {
+    .btns { display: grid; gap: 12px; }
+    .btn { text-align: center; padding: .95rem 1rem; }
+  }
+
+  /* landscape phones and foldables have very short viewports - don't
+     spend 69px of them on a pinned header */
+  @media (max-height: 500px) {
+    header { position: static; }
+  }
+
+  /* below ~344px "COMPLYON-LADY" breaks at the hyphen next to the
+     button, so scale the logo and CTA down to keep it on one line */
+  @media (max-width: 343px) {
+    .logo { font-size: 1rem; }
+    .logo small { font-size: .5rem; letter-spacing: .1em; }
+    .cta { font-size: .62rem; padding: .4rem .75rem; }
+    nav a { font-size: .64rem; letter-spacing: .07em; }
+  }
+
+  @media (max-width: 380px) {
+    .wrap, .bar { padding-left: 18px; padding-right: 18px; }
+    .stats { grid-template-columns: 1fr; gap: 1.1rem; }
+    .stats b { font-size: 2rem; }
+    .stats span { font-size: .6rem; letter-spacing: .12em; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#top">COMPLY<span>ON</span><span class="ghost">-LADY</span><small>LLC &middot; Compliance Advisory</small></a>
+    <div class="nav-group">
+      <nav>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+      <a class="cta" href="#contact">Contact</a>
+    </div>
+  </div>
+</header>
+
+<div class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+    <p class="tag">Independent Compliance Advisory</p>
+    <h1>Where <em>precision</em> meets<br>regulatory expertise.</h1>
+    <p>
+      <strong>Institutional-grade compliance leadership — without the institutional overhead.</strong>
+      Senior-level compliance and risk advisory for institutional asset managers, investment advisers,
+      OCIOs, pension funds, and digital asset firms. Built on 16+ years at the intersection of
+      regulation, governance, and operational excellence.
+    </p>
+    <div class="btns">
+      <a class="btn btn-solid" href="#services">Our Services</a>
+      <a class="btn btn-ghost" href="#contact">Schedule a Consultation</a>
+    </div>
+    </div>
+    <aside class="stats">
+      <div><b>16+</b><span>Years Experience</span></div>
+      <div><b>$53B+</b><span>Assets Overseen</span></div>
+      <div><b>0</b><span>Audit Findings</span></div>
+    </aside>
+  </div>
+</div>
+
+<section id="about">
+  <div class="wrap about">
+    <div>
+      <figure class="card">
+      <img src="reema-keen.jpg" alt="Reema Keen, Founder and Principal of ComplyOn LLC" width="936" height="1245">
+      <figcaption class="body">
+        <blockquote>&ldquo;Compliance is not a constraint on business — it is the foundation on which lasting institutions are built.&rdquo;</blockquote>
+        <div class="name">Reema Keen</div>
+        <div class="role">Founder &amp; Principal, ComplyOn LLC</div>
+        </figcaption>
+      </figure>
+      <div class="glance">
+        <h3>At a glance</h3>
+        <dl>
+          <div><dt>Experience</dt><dd>16+ years in compliance and risk</dd></div>
+          <div><dt>Most recent role</dt><dd>Managing Director &amp; CCO, SEC-registered OCIO</dd></div>
+          <div><dt>Certification</dt><dd>CAMS candidate</dd></div>
+          <div><dt>Audit record</dt><dd>11+ internal and external audits, zero findings</dd></div>
+          <div><dt>Based in</dt><dd>Atlanta, Georgia &middot; serving clients nationwide</dd></div>
+        </dl>
+        <!-- Add education, Series licenses or bar admissions here if you'd like them listed. -->
+      </div>
+    </div>
+    <div>
+      <p class="tag">About ComplyOn LLC</p>
+      <h2>Senior compliance expertise, delivered with precision.</h2>
+      <p>ComplyOn LLC is an Atlanta-based independent compliance and risk advisory practice founded by Reema Keen, a compliance leader with more than 16 years of experience building and overseeing regulatory compliance programs across SEC-registered investment advisers, institutional pension funds, and global financial institutions.</p>
+      <p>Most recently, Reema served as Managing Director and Chief Compliance Officer at a $3.5 billion SEC-registered OCIO firm, where she institutionalized the compliance program from the ground up — leading Form ADV review, annual review audits, and custody audit coordination, and bringing the firm to full SEC examination readiness. Prior to that, she held senior compliance and operations leadership roles at UPS Investments Group, a $50B+ institutional pension fund, owning governance, operational due diligence, cybersecurity risk, and third-party risk frameworks across 200+ investment managers spanning single-manager and multi-manager platforms — experience that gave her particular fluency in the sub-adviser oversight and governance challenges facing manager-of-managers structures. Earlier in her career, she supported enterprise-wide AML/BSA remediation following a DOJ consent order.</p>
+      <p>While Reema's direct professional experience to date has been built entirely within traditional financial services, the competencies she has developed — AML/BSA program design, custody and safeguarding frameworks, enforcement action remediation, and institutional governance — form the regulatory foundation upon which digital asset compliance programs are built. As the industry matures under increasing SEC, FinCEN, and DOL oversight, Reema brings the institutional rigor and regulatory depth that emerging digital asset firms require as they build compliance infrastructure designed to withstand examination.</p>
+      <p>ComplyOn LLC brings institutional-grade rigor to organizations that need it — without the overhead of a large firm.</p>
+      <ul class="chips">
+        <li>SEC Regulatory Compliance</li>
+        <li>AML / OFAC</li>
+        <li>ERISA / DOL</li>
+        <li>CAMS Candidate</li>
+        <li>GRC</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <p class="tag">What We Do</p>
+    <h2>Compliance services built for institutional complexity.</h2>
+    <p class="lead">From AML remediation and ERISA governance to contract review and digital asset frameworks, ComplyOn LLC delivers senior advisory across the full compliance lifecycle — with the depth of an in-house CCO and the flexibility of an independent consultant.</p>
+    <div class="grid g3" style="margin-top:2.5rem">
+      <div class="box">
+        <h3>AML, OFAC &amp; Financial Crime</h3>
+        <p>Program design, gap assessments, transaction monitoring, OFAC screening frameworks, and enforcement action remediation support. Deep experience with DOJ BSA actions.</p>
+      </div>
+      <div class="box">
+        <h3>SEC Regulatory Compliance</h3>
+        <p>Examination readiness, Form ADV review, compliance program assessments, surveillance, conflicts of interest management, and regulatory filing support for registered advisers.</p>
+      </div>
+      <div class="box">
+        <h3>Marketing Rule &amp; Advertising Review</h3>
+        <p>Review of marketing materials, performance presentations, testimonials, and endorsements against SEC Rule 206(4)-1, including substantiation files and books-and-records support.</p>
+      </div>
+      <div class="box">
+        <h3>Governance, Risk &amp; Controls</h3>
+        <p>Enterprise GRC framework design, board and committee governance review, cybersecurity policy development, control testing, escalation protocols, and board-level reporting infrastructure.</p>
+      </div>
+      <div class="box">
+        <h3>ERISA &amp; DOL Advisory</h3>
+        <p>Fiduciary compliance, prohibited transaction analysis, and operational due diligence frameworks for pension and institutional investment environments.</p>
+      </div>
+      <div class="box">
+        <h3>Operational Due Diligence</h3>
+        <p>ODD frameworks across 100+ investment managers, covering custody, AML, valuation, and third-party risk for public, private, illiquid, and offshore fund structures.</p>
+      </div>
+      <div class="box">
+        <h3>Fractional CCO Services</h3>
+        <p>Dedicated compliance leadership, program ownership, and regulatory interface on a part-time basis, tailored to the size and stage of your organization.</p>
+      </div>
+      <div class="box">
+        <h3>Compliance Training &amp; Testing</h3>
+        <p>Annual and role-specific training for staff and supervised persons, code of ethics attestations, personal trading reviews, and periodic testing of controls against written policy.</p>
+      </div>
+      <div class="box">
+        <h3>Contract Review &amp; Advisory</h3>
+        <p>Compliance-focused review of NDAs, investment management agreements, sub-advisory agreements, custodian agreements, and limited partnership agreements — identifying regulatory risk, fiduciary obligations, and governance gaps before execution.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="experience" id="experience">
+  <div class="wrap">
+    <p class="tag">Track Record</p>
+    <h2>A career built in the most demanding compliance environments.</h2>
+    <p class="lead">Reema Keen has led compliance programs from inception, registered broker-dealers with FINRA, navigated DOJ enforcement actions, and delivered zero-finding audit outcomes across institutional-grade environments.</p>
+
+    <div class="timeline">
+      <article class="job">
+        <p class="date">Feb 2023 — Jun 2025</p>
+        <h3>Managing Director &amp; Chief Compliance Officer</h3>
+        <p class="org">Disciplina Capital Management, LLC — Nashville, TN | SEC-registered OCIO, $3.5B AUM</p>
+        <ul>
+          <li>Institutionalized and significantly enhanced the firm's compliance program, establishing policies, controls, monitoring, and governance infrastructure befitting a mature institutional adviser</li>
+          <li>Led the firm's Form ADV review process and annual review audit</li>
+          <li>Coordinated custody audits and established the governance infrastructure and documentation standards necessary to bring the firm to full SEC examination readiness</li>
+          <li>Oversaw AML/OFAC compliance across 30+ accounts</li>
+          <li>Managed ongoing auditor-facing engagements</li>
+        </ul>
+      </article>
+      <article class="job">
+        <p class="date">Aug 2021 — Jan 2023</p>
+        <h3>Director, Investments Compliance &amp; Operations</h3>
+        <p class="org">UPS Investments Group — Atlanta, GA | $50B+ Institutional Pension Fund</p>
+        <ul>
+          <li>Owned enterprise-wide GRC, cybersecurity, and third-party risk frameworks</li>
+          <li>Implemented the Uncleared Margin Rules (UMR) collateral program to bring the corporate pension into compliance</li>
+          <li>Managed 200+ investment manager relationships across public, private, and offshore structures</li>
+          <li>Delivered multiple audits with zero findings</li>
+        </ul>
+      </article>
+      <article class="job">
+        <p class="date">Jan 2014 — Aug 2021</p>
+        <h3>Manager, Investments Compliance &amp; Operations</h3>
+        <p class="org">UPS Investments Group — Atlanta, GA</p>
+        <ul>
+          <li>Built compliance monitoring, ODD frameworks, and conflict-of-interest controls</li>
+          <li>Executed due diligence on 100+ investment managers</li>
+          <li>Supported 8 internal and 3 external audits with zero findings</li>
+        </ul>
+      </article>
+      <article class="job">
+        <p class="date">Dec 2011 — Sep 2013</p>
+        <h3>Compliance Officer</h3>
+        <p class="org">HSBC Securities Inc. — New York, NY | FINRA-registered Broker-Dealer</p>
+        <ul>
+          <li>Supported enterprise-wide remediation following a DOJ AML/BSA enforcement action</li>
+          <li>Delivered executive-level reporting on anti-bribery, sanctions, and staff dealing risk</li>
+          <li>Managed OFAC screening and risk escalation across customer and counterparty relationships</li>
+        </ul>
+      </article>
+      <article class="job">
+        <p class="date">Jan 2010 — Dec 2011</p>
+        <h3>Compliance Officer</h3>
+        <p class="org">Elara Securities Inc. — New York, NY | FINRA-registered Boutique Investment Bank</p>
+        <ul>
+          <li>Played a central role in registering the firm with FINRA</li>
+          <li>Advised investment staff on marketing of offshore fund structures (up to $500M AUM) to institutional investors via private placements under Regulation D and Regulation S</li>
+          <li>Amended U.S. disclosures, subscription agreements, and investor questionnaires</li>
+          <li>Prepared SEC and Blue Sky filings, and reviewed and approved corporate presentations for eight private placement transactions</li>
+          <li>Assisted the CCO and counsel in securing the firm's license to offer secondary debt and equity securities to U.S. institutional investors</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="ind">
+  <div class="wrap">
+    <p class="tag" style="text-align:center">Who We Serve</p>
+    <h2>Industries &amp; client types.</h2>
+    <div class="grid g3" style="margin-top:2.5rem">
+      <div class="box"><b>IA</b><strong>Investment Advisers</strong><p>SEC-registered RIAs, OCIO firms, hedge funds, and private equity managers</p></div>
+      <div class="box"><b>VC</b><strong>Venture Managers</strong><p>Emerging and established venture capital fund managers building institutional-grade compliance and governance infrastructure</p></div>
+      <div class="box"><b>PF</b><strong>Pension Funds</strong><p>Corporate and public pension funds navigating ERISA, DOL, and fiduciary requirements</p></div>
+      <div class="box"><b>EF</b><strong>Endowments &amp; Foundations</strong><p>Nonprofit and university investment pools balancing fiduciary duty, spending policy, and delegated manager oversight</p></div>
+      <div class="box"><b>OC</b><strong>OCIO Firms</strong><p>Outsourced Chief Investment Officer platforms managing multi-manager, institutional-scale portfolios</p></div>
+      <div class="box"><b>DA</b><strong>Digital Assets</strong><p>Firms building AML, custody, and governance infrastructure where institutional compliance expertise translates directly to digital asset regulatory requirements</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="engagements">
+  <div class="wrap">
+    <p class="tag">How We Work Together</p>
+    <h2>Engagement models built around your stage.</h2>
+    <div class="grid g3" style="margin-top:2.5rem">
+      <div class="box">
+        <p class="kicker">Outsourced</p>
+        <h3>Fractional CCO</h3>
+        <p>Hand off day-to-day compliance ownership to a senior advisor, without adding headcount.</p>
+        <ul>
+          <li>Program ownership and regulatory interface</li>
+          <li>Testing, remediation, and documentation</li>
+          <li>Form ADV, filings, and exam coordination</li>
+        </ul>
+        <p class="fee">Monthly Retainer</p>
+      </div>
+      <div class="box">
+        <p class="kicker">Ongoing</p>
+        <h3>Advisory Support</h3>
+        <p>Recurring support alongside your existing team — as much or as little as you need.</p>
+        <ul>
+          <li>Compliance calendar management</li>
+          <li>Annual review and risk assessment</li>
+          <li>Advice on new or amended regulations</li>
+        </ul>
+        <p class="fee">Monthly Retainer or Hourly</p>
+      </div>
+      <div class="box">
+        <p class="kicker">Project</p>
+        <h3>Defined Engagements</h3>
+        <p>A specific compliance problem, scoped and solved, with documentation your team can run with.</p>
+        <ul>
+          <li>Program builds and registration support</li>
+          <li>Operational due diligence reviews</li>
+          <li>Contract review and mock exam prep</li>
+        </ul>
+        <p class="fee">Hourly or Flat Fee</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <p class="tag">Common Questions</p>
+    <h2>Answers before we connect.</h2>
+    <div class="faq">
+      <details open>
+        <summary>Do you provide compliance services for broker-dealers?</summary>
+        <p>No. ComplyOn LLC focuses exclusively on investment advisers, OCIOs, pension funds, and digital asset firms. While Reema's background includes broker-dealer compliance experience, ComplyOn does not currently offer broker-dealer compliance services.</p>
+      </details>
+      <details>
+        <summary>Do regulators allow an outsourced or fractional Chief Compliance Officer?</summary>
+        <p>Yes. The CCO may be in-house or outsourced, provided the individual is knowledgeable about applicable regulations and has sufficient authority and access to senior management to implement and enforce the compliance program.</p>
+      </details>
+      <details>
+        <summary>What does an engagement cost?</summary>
+        <p>It depends on scope. Fractional CCO engagements are billed as a monthly retainer, ongoing support as a retainer or hourly rate, and project-based work as an hourly or flat fee. A proposal follows an initial conversation about your firm and needs.</p>
+      </details>
+      <details>
+        <summary>Do you work with firms that don't yet have an SEC-registered adviser or formal compliance program?</summary>
+        <p>Yes. ComplyOn supports firms building a compliance program from the ground up, including registration support, initial policy drafting, and governance infrastructure — as well as firms with mature programs seeking an experienced second set of eyes.</p>
+      </details>
+      <details>
+        <summary>Can you support a firm with digital asset exposure?</summary>
+        <p>Yes. ComplyOn works with firms building AML, custody, and governance infrastructure for digital asset activities, applying institutional compliance frameworks developed across traditional financial services to the requirements emerging under SEC, FinCEN, and DOL oversight.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap contact-grid">
+    <div>
+      <p class="tag">Get In Touch</p>
+      <h2>Let's discuss your compliance needs.</h2>
+      <p class="lead" style="margin-bottom:2rem">Whether you need fractional CCO support, a compliance program assessment, or ongoing advisory services, ComplyOn LLC is ready to engage. All inquiries are handled with strict confidentiality.</p>
+      <dl>
+        <div class="detail">
+          <div class="dot"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><dt>Email</dt><dd><a href="mailto:reema.keen@complyonllc.com">reema.keen@complyonllc.com</a></dd></div>
+        </div>
+        <div class="detail">
+          <div class="dot"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 010 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.72 6.72l1.28-.56a2 2 0 012.11.45c.91.34 1.85.57 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+          <div><dt>Phone</dt><dd><a href="tel:+16468964191">(646) 896-4191</a></dd></div>
+        </div>
+        <div class="detail">
+          <div class="dot"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><dt>Location</dt><dd>Atlanta, Georgia</dd></div>
+        </div>
+      </dl>
+
+      <div class="steps">
+        <h3>What happens next</h3>
+        <ol>
+          <li><b>Introductory call</b><span>A short conversation about your firm, its stage, and where the compliance gaps sit.</span></li>
+          <li><b>Scoped proposal</b><span>A written scope with deliverables and fees — retainer, hourly, or flat, depending on the work.</span></li>
+          <li><b>Engagement letter</b><span>Terms signed, and work begins.</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <form action="mailto:reema.keen@complyonllc.com" method="post" enctype="text/plain">
+      <div class="field row">
+        <div>
+          <label for="first">First Name</label>
+          <input id="first" name="first" type="text" placeholder="Jane" required>
+        </div>
+        <div>
+          <label for="last">Last Name</label>
+          <input id="last" name="last" type="text" placeholder="Smith" required>
+        </div>
+      </div>
+      <div class="field">
+        <label for="org">Organization</label>
+        <input id="org" name="organization" type="text" placeholder="Your firm or company">
+      </div>
+      <div class="field">
+        <label for="email">Email Address</label>
+        <input id="email" name="email" type="email" placeholder="jane@example.com" required>
+      </div>
+      <div class="field">
+        <label for="area">Area of Interest</label>
+        <select id="area" name="area">
+          <option value="" disabled selected>Select a service area</option>
+          <option>AML / OFAC / Financial Crime</option>
+          <option>SEC Regulatory Compliance</option>
+          <option>ERISA / DOL Advisory</option>
+          <option>Fractional CCO Services</option>
+          <option>Governance, Risk &amp; Controls</option>
+          <option>Operational Due Diligence</option>
+          <option>Digital Assets Compliance</option>
+          <option>Contract Review &amp; Advisory</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="msg">Message</label>
+        <textarea id="msg" name="message" placeholder="Tell us briefly about your compliance needs..."></textarea>
+      </div>
+      <button type="submit">Send Inquiry</button>
+      <p class="note">Or email <a href="mailto:reema.keen@complyonllc.com">reema.keen@complyonllc.com</a> directly.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#top">COMPLY<span>ON</span></a>
+    <nav>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="credit"><a href="https://www.ark-am.com" target="_blank" rel="noopener">&copy; 2026 Ark-am LLC</a></div>
+  </div>
+</footer>
+
+</body>
+</html>

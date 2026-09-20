@@ -326,6 +326,110 @@
   .credit a:hover { color: #fff; }
   footer nav ul { gap: 1.4rem; }
 
+  /* ---------- motion ----------
+     Two independent layers:
+       1. hover/focus transitions, which need no JS and always apply;
+       2. scroll reveals + hero entrance, gated behind .js (set by the
+          script at the end of <body>) so the page is fully readable if
+          JavaScript never runs, and behind prefers-reduced-motion.
+     Reveal targets are chosen by the script, not marked up in the HTML. */
+  :root {
+    --ease: cubic-bezier(.22, .61, .36, 1);
+    --dur: .55s;
+  }
+
+  /* --- interactive transitions --- */
+  nav a, .cta, .btn, .credit a, button, .chips li,
+  input, select, textarea, .faq summary, .detail .dot {
+    transition: color .25s var(--ease), background-color .25s var(--ease),
+                border-color .25s var(--ease), transform .25s var(--ease),
+                box-shadow .25s var(--ease), opacity .25s var(--ease);
+  }
+
+  /* underline that grows out from the left of each nav link */
+  nav a { position: relative; }
+  nav a::after {
+    content: ""; position: absolute; left: 0; bottom: -5px;
+    width: 100%; height: 1px; background: var(--gold);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .3s var(--ease);
+  }
+  nav a:hover::after, nav a:focus-visible::after { transform: scaleX(1); }
+
+  .cta:hover, .btn-solid:hover, button:hover { transform: translateY(-2px); }
+  .cta:active, .btn:active, button:active { transform: translateY(0); }
+  .btn-solid:hover { box-shadow: 0 6px 18px rgba(201, 169, 110, .28); }
+  button:hover { box-shadow: 0 6px 18px rgba(59, 45, 110, .25); }
+
+  .box {
+    transition: transform .3s var(--ease), box-shadow .3s var(--ease),
+                border-color .3s var(--ease);
+  }
+  .box:hover {
+    transform: translateY(-4px);
+    border-color: rgba(107, 92, 165, .38);
+    box-shadow: 0 12px 30px rgba(30, 26, 46, .08);
+  }
+
+  .card { transition: box-shadow .4s var(--ease); }
+  .card:hover { box-shadow: 0 18px 40px rgba(30, 26, 46, .18); }
+  .card img { transition: transform .7s var(--ease); }
+  .card:hover img { transform: scale(1.04); }
+
+  .chips li:hover { background: var(--light); transform: translateY(-2px); }
+  .detail:hover .dot { background: var(--light); transform: scale(1.08); }
+  .faq summary:hover { color: var(--mid); }
+  .faq summary::after { transition: transform .3s var(--ease), color .25s var(--ease); }
+  .faq details[open] summary::after { transform: rotate(180deg); }
+  input:hover, select:hover, textarea:hover { border-color: var(--light); }
+
+  /* --- keyframes --- */
+  @keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* scroll reveal: .js gates it so no-JS visitors never see hidden content */
+    .js [data-reveal] {
+      opacity: 0; transform: translateY(22px);
+      transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+    }
+    .js [data-reveal].in { opacity: 1; transform: none; }
+
+    /* stagger siblings so a row of cards arrives as a sequence, not a block */
+    .js [data-reveal="1"] { transition-delay: .08s; }
+    .js [data-reveal="2"] { transition-delay: .16s; }
+    .js [data-reveal="3"] { transition-delay: .24s; }
+    .js [data-reveal="4"] { transition-delay: .32s; }
+    .js [data-reveal="5"] { transition-delay: .40s; }
+
+    /* hero animates on load rather than on scroll — it is already in view */
+    .js .hero .tag,
+    .js .hero h1,
+    .js .hero > .wrap > div > p:not(.tag),
+    .js .hero .btns,
+    .js .stats { animation: rise .7s var(--ease) both; }
+    .js .hero h1 { animation-delay: .08s; }
+    .js .hero > .wrap > div > p:not(.tag) { animation-delay: .16s; }
+    .js .hero .btns { animation-delay: .24s; }
+    .js .stats { animation-delay: .32s; }
+
+    /* FAQ answers slide in when a question is opened */
+    .faq details[open] p { animation: rise .35s var(--ease) both; }
+  }
+
+  /* sticky header lifts off the page once scrolled */
+  header { transition: box-shadow .3s var(--ease), background-color .3s var(--ease); }
+  header.scrolled { box-shadow: 0 6px 24px rgba(30, 26, 46, .28); }
+
+  /* honour the OS setting: no reveals, no entrance, no movement on hover */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+      transition-duration: .01ms !important; scroll-behavior: auto !important;
+    }
+    .js [data-reveal] { opacity: 1; transform: none; }
+  }
+
   /* ---------- tablet ---------- */
   @media (max-width: 860px) {
     section { padding: 60px 0; }
@@ -818,6 +922,70 @@
     <div class="credit"><a href="https://www.ark-am.com" target="_blank" rel="noopener">&copy; 2026 Ark-am LLC</a></div>
   </div>
 </footer>
+
+<script>
+  /* Progressive enhancement: everything below is optional polish. The page
+     is complete without it, so the .js class is what switches the reveal
+     styles on -- set here, not in the markup, so a failed script can never
+     leave a section stuck at opacity 0. */
+  (function () {
+    var root = document.documentElement;
+    if (!('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    root.className += ' js';
+
+    /* Groups whose children should arrive in sequence. Each child gets an
+       index (capped at 5, matching the delay rules in the stylesheet). */
+    var staggered = ['.grid', '.about', '.timeline', '.contact-grid', '.faq'];
+    /* Standalone elements that just fade up on their own. */
+    var singles = 'section > .wrap > .tag, section > .wrap > h2, section > .wrap > .lead';
+
+    var items = [];
+
+    staggered.forEach(function (sel) {
+      document.querySelectorAll(sel).forEach(function (group) {
+        var kids = sel === '.timeline' ? group.querySelectorAll('.job')
+                 : sel === '.faq' ? group.querySelectorAll('details')
+                 : group.children;
+        Array.prototype.forEach.call(kids, function (el, i) {
+          /* Card grids are 3 across, so restarting the count each row gives a
+             left-to-right ripple instead of a long tail of equal delays.
+             Everything else is a short list and just counts up. */
+          el.setAttribute('data-reveal', sel === '.grid' ? i % 3 : Math.min(i, 5));
+          items.push(el);
+        });
+      });
+    });
+
+    document.querySelectorAll(singles).forEach(function (el) {
+      el.setAttribute('data-reveal', '');
+      items.push(el);
+    });
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);   /* reveal once, then stop watching */
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+
+    items.forEach(function (el) { io.observe(el); });
+
+    /* Shadow under the sticky header once the page has scrolled at all. */
+    var header = document.querySelector('header');
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        header.classList.toggle('scrolled', window.scrollY > 8);
+        ticking = false;
+      });
+    }, { passive: true });
+  })();
+</script>
 
 </body>
 </html>

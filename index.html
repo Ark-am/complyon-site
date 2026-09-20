@@ -415,11 +415,41 @@
 
     /* FAQ answers slide in when a question is opened */
     .faq details[open] p { animation: rise .35s var(--ease) both; }
+
+    /* The timeline's left rule draws downward, then each role's dot pops in
+       as that entry reveals. The real border is hidden and replaced by a
+       pseudo-element so the plain border survives as the no-JS fallback. */
+    .js .timeline { position: relative; border-left-color: transparent; }
+    .js .timeline::before {
+      content: ""; position: absolute; left: -1px; top: 0;
+      width: 1px; height: 100%; background: rgba(196, 181, 232, .3);
+      transform: scaleY(0); transform-origin: top;
+      transition: transform 1.1s var(--ease);
+    }
+    .js .timeline.in::before { transform: scaleY(1); }
+    .js .timeline .job::before { transform: scale(0); transition: transform .45s var(--ease) .2s; }
+    .js .timeline .job.in::before { transform: scale(1); }
   }
 
   /* sticky header lifts off the page once scrolled */
   header { transition: box-shadow .3s var(--ease), background-color .3s var(--ease); }
   header.scrolled { box-shadow: 0 6px 24px rgba(30, 26, 46, .28); }
+
+  /* reading-progress bar along the bottom edge of the sticky header.
+     --p is set by the scroll handler; it is hidden at the breakpoints
+     where the header stops being sticky (see the media queries below). */
+  header::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -1px;
+    height: 2px; background: var(--gold); transform-origin: left;
+    transform: scaleX(var(--p, 0));
+  }
+
+  /* the nav link for whichever section is currently on screen */
+  header nav a.active { color: #fff; }
+  header nav a.active::after { transform: scaleX(1); }
+
+  /* digits change width as they count, so lock the glyphs to one width */
+  .stats b { font-variant-numeric: tabular-nums; }
 
   /* honour the OS setting: no reveals, no entrance, no movement on hover */
   @media (prefers-reduced-motion: reduce) {
@@ -481,6 +511,8 @@
   @media (max-width: 639px) {
     .about { grid-template-columns: 1fr; }
     header { position: static; }
+    /* not sticky here, so the progress bar has nothing to sit against */
+    header::after { display: none; }
     /* logo left + Contact top-right on row 1, nav links across row 2 */
     .bar {
       display: grid; grid-template-columns: 1fr auto;
@@ -531,6 +563,8 @@
      spend 69px of them on a pinned header */
   @media (max-height: 500px) {
     header { position: static; }
+    /* not sticky here, so the progress bar has nothing to sit against */
+    header::after { display: none; }
   }
 
   /* below ~344px "COMPLYON-LADY" breaks at the hyphen next to the
@@ -971,19 +1005,98 @@
       });
     }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
 
+    /* The timeline itself is watched too, but without a data-reveal
+       attribute -- it only needs the .in class so its rule can draw down. */
+    var timeline = document.querySelector('.timeline');
+    if (timeline) { timeline.setAttribute('data-draw', ''); items.push(timeline); }
+
     items.forEach(function (el) { io.observe(el); });
 
-    /* Shadow under the sticky header once the page has scrolled at all. */
+    /* --- hero stat counters ---------------------------------------------
+       Reads the final value straight out of the markup, so the numbers
+       live in the HTML and nothing here needs updating when they change.
+       "$53B+" splits into prefix "$", value 53, suffix "B+". A target of
+       zero counts DOWN from 30 instead, since counting up to nothing
+       reads as broken -- and "0 audit findings" is the point being made. */
+    document.querySelectorAll('.stats b').forEach(function (el) {
+      var parts = el.textContent.trim().match(/^(\D*)(\d+(?:\.\d+)?)(.*)$/);
+      if (!parts) return;
+
+      var prefix = parts[1], target = parseFloat(parts[2]), suffix = parts[3];
+      var from = target === 0 ? 30 : 0;
+      var decimals = (parts[2].split('.')[1] || '').length;
+      var started = false;
+
+      function render(v) {
+        el.textContent = prefix + v.toFixed(decimals) + suffix;
+      }
+
+      function run() {
+        if (started) return;
+        started = true;
+        var DURATION = 1400, begin = null;
+        (function step(now) {
+          if (begin === null) begin = now;
+          var t = Math.min((now - begin) / DURATION, 1);
+          var eased = 1 - Math.pow(1 - t, 3);          /* ease-out cubic */
+          render(from + (target - from) * eased);
+          if (t < 1) requestAnimationFrame(step);
+          else render(target);                          /* land exactly */
+        })(performance.now());
+      }
+
+      render(from);
+      /* start when the panel is on screen, after its entrance settles */
+      new IntersectionObserver(function (entries, obs) {
+        if (!entries[0].isIntersecting) return;
+        obs.disconnect();
+        setTimeout(run, 400);
+      }, { threshold: 0.4 }).observe(el.closest('.stats') || el);
+    });
+
+    /* --- current-section nav highlight -----------------------------------
+       The band is the middle slice of the viewport: whichever section
+       crosses it owns the highlight. */
+    var navLinks = {};
+    document.querySelectorAll('header nav a[href^="#"]').forEach(function (a) {
+      navLinks[a.getAttribute('href').slice(1)] = a;
+    });
+    var watched = Object.keys(navLinks)
+      .map(function (id) { return document.getElementById(id); })
+      .filter(Boolean);
+
+    if (watched.length) {
+      var sectionObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var link = navLinks[entry.target.id];
+          if (!link) return;
+          Object.keys(navLinks).forEach(function (k) { navLinks[k].classList.remove('active'); });
+          link.classList.add('active');
+        });
+      }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+      watched.forEach(function (sec) { sectionObserver.observe(sec); });
+    }
+
+    /* --- header shadow + reading progress --------------------------------
+       Both live in one rAF-throttled passive handler so scrolling stays
+       off the main thread's critical path. */
     var header = document.querySelector('header');
     var ticking = false;
-    window.addEventListener('scroll', function () {
+    function onScroll() {
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(function () {
+        var max = document.documentElement.scrollHeight - window.innerHeight;
+        var p = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
         header.classList.toggle('scrolled', window.scrollY > 8);
+        header.style.setProperty('--p', p.toFixed(4));
         ticking = false;
       });
-    }, { passive: true });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    onScroll();
   })();
 </script>
 

@@ -46,9 +46,29 @@ section with comment headers (`/* ---------- header ---------- */` and so
 on). The markup below it follows the same order: header, hero, about,
 services, experience, industries, engagements, FAQ, contact, footer.
 
-Fonts (Cormorant Garamond and DM Sans) load from Google Fonts, so the page
-needs network access to render with its intended typography. The favicon is
-an inline SVG data URI in the head — there is no icon file.
+The favicon is an inline SVG data URI in the head — there is no icon file.
+
+## Fonts
+
+Cormorant Garamond and DM Sans are **self-hosted** from `fonts/`. The page
+makes no third-party request to render, which removes a render-blocking
+round trip to `fonts.googleapis.com` and avoids sending visitor IP addresses
+to Google — the practice German courts have found to breach GDPR.
+
+The files come from the `@fontsource/*` packages, kept as devDependencies so
+the origin is traceable and updates are a reinstall away. They are not
+imported at build time; the `.woff2` files were copied into `fonts/` and are
+committed, because GitHub Pages serves this repo's root and never runs the
+build.
+
+Only what the stylesheet asks for is shipped — Cormorant 300/600, DM Sans
+300/400/500, latin subset, woff2 only — five files totalling ~88 kB. To add
+a weight: copy the matching file out of `node_modules/@fontsource/<family>/
+files/`, then add an `@font-face` rule in the stylesheet.
+
+The two faces used above the fold are preloaded in the head; the rest load
+from the `@font-face` rules. All five declare `font-display: swap`, so text
+paints immediately in the fallback face rather than staying invisible.
 
 ## Responsive design
 

@@ -399,23 +399,32 @@
   .form-status a { color: var(--purple); }
   .req { color: var(--purple); }
 
-  /* ---------- footer ---------- */
-  footer { background: #1b1526; color: rgba(255,255,255,0.62); padding: clamp(3rem, 6vw, 5rem) 0 2.5rem; }
-  .foot-top {
-    display: flex; flex-wrap: wrap; gap: 2rem;
-    justify-content: space-between; align-items: center;
-    padding-bottom: 2.5rem; border-bottom: 1px solid rgba(255,255,255,0.13);
+  /* ---------- footer ----------
+     Centred and deliberately quiet: mark, wordmark, one row of links, rule,
+     legal line. Everything is measured from the centre, so the only widths
+     that matter are the copy measures. */
+  footer {
+    background: #1b1526; color: rgba(255,255,255,0.62);
+    padding: clamp(3.5rem, 6vw, 5.5rem) 0 2.4rem; text-align: center;
   }
-  .foot-brand { display: flex; align-items: center; gap: 0.8rem; }
-  .foot-name { font-family: var(--serif); font-size: 1.35rem; color: #fff; }
+  .foot-mark { display: flex; justify-content: center; margin-bottom: 1.1rem; }
+  .foot-name { font-family: var(--serif); font-size: clamp(1.45rem, 3vw, 1.7rem); color: #fff; font-weight: 400; }
   .foot-name b { font-weight: 400; color: #b6a4dd; }
-  .foot-links { display: flex; flex-wrap: wrap; gap: 0.9rem 1.8rem; }
+  .foot-tag {
+    margin-top: 0.5rem; font-size: 0.8rem; letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.58);
+  }
+  /* keep the city and state on one line when the tagline wraps */
+  .foot-tag .nowrap { white-space: nowrap; }
+  .foot-links {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 0.8rem 2rem; margin: clamp(1.8rem, 4vw, 2.4rem) 0;
+  }
   .foot-links a { font-size: 0.88rem; color: rgba(255,255,255,0.62); text-decoration: none; transition: color 0.2s ease; }
   .foot-links a:hover { color: #fff; }
-  .foot-bottom {
-    padding-top: 1.8rem; display: flex; flex-wrap: wrap; gap: 0.6rem 2rem;
-    justify-content: space-between; font-size: 0.79rem; color: rgba(255,255,255,0.58);
-  }
+  .foot-rule { height: 1px; background: rgba(255,255,255,0.13); }
+  .foot-bottom { padding-top: 1.6rem; font-size: 0.79rem; color: rgba(255,255,255,0.58); line-height: 1.9; }
+  .foot-disclaimer { max-width: 76ch; margin: 0.3rem auto 0; }
 
   /* ---------- reveal ---------- */
   .reveal { opacity: 0; transition: opacity 0.7s ease; }
@@ -495,7 +504,7 @@
     .frow { grid-template-columns: 1fr; gap: 1.7rem; }
     .faq-a { padding-right: 0; }
     .portrait { max-width: none; }
-    .foot-top { gap: 1.6rem; }
+    .foot-links { gap: 0.8rem 1.5rem; }
   }
 
   /* small phones: let the calls to action own the full width */
@@ -1146,31 +1155,31 @@
 
 <footer>
   <div class="wrap">
-    <div class="foot-top">
-      <div class="foot-brand">
-        <svg width="26" height="31" viewBox="0 0 32 38" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-          <path d="M2 3 L10 3 L16 0 L22 3 L30 3 L30 20 Q30 33 16 38 Q2 33 2 20 Z" fill="#6b52a0"/>
-          <text x="16" y="17" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-size="9" fill="#ffffff">CO</text>
-          <line x1="8" y1="23" x2="24" y2="23" stroke="rgba(255,255,255,0.5)" stroke-width="0.6"/>
-          <text x="16" y="28" text-anchor="middle" dominant-baseline="central" font-family="Helvetica,Arial,sans-serif" font-size="3.8" fill="#ffffff">ADVISORY</text>
-        </svg>
-        <span class="foot-name">Comply<b>On</b> LLC</span>
-      </div>
-      <nav aria-label="Footer">
-        <ul class="foot-links">
-          <li><a href="#about">About</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#clients">Who we serve</a></li>
-          <li><a href="#experience">Track record</a></li>
-          <li><a href="#faq">Questions</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li><a href="https://www.linkedin.com/in/reema-keen-57a8b77/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-        </ul>
-      </nav>
+    <div class="foot-mark">
+      <svg width="30" height="36" viewBox="0 0 32 38" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <path d="M2 3 L10 3 L16 0 L22 3 L30 3 L30 20 Q30 33 16 38 Q2 33 2 20 Z" fill="#6b52a0"/>
+        <text x="16" y="17" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-size="9" fill="#ffffff">CO</text>
+        <line x1="8" y1="23" x2="24" y2="23" stroke="rgba(255,255,255,0.5)" stroke-width="0.6"/>
+        <text x="16" y="28" text-anchor="middle" dominant-baseline="central" font-family="Helvetica,Arial,sans-serif" font-size="3.8" fill="#ffffff">ADVISORY</text>
+      </svg>
     </div>
+    <div class="foot-name">Comply<b>On</b> LLC</div>
+    <div class="foot-tag">Independent compliance &amp; risk advisory · <span class="nowrap">Atlanta, Georgia</span></div>
+    <nav aria-label="Footer">
+      <ul class="foot-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#clients">Who we serve</a></li>
+        <li><a href="#experience">Track record</a></li>
+        <li><a href="#faq">Questions</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="https://www.linkedin.com/in/reema-keen-57a8b77/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+      </ul>
+    </nav>
+    <div class="foot-rule"></div>
     <div class="foot-bottom">
-      <span>© 2026 ComplyOn LLC. Atlanta, Georgia. All rights reserved.</span>
-      <span>Independent compliance &amp; risk advisory</span>
+      <div>© 2026 ComplyOn LLC. All rights reserved.</div>
+      <div class="foot-disclaimer">ComplyOn LLC provides compliance consulting and does not provide legal, tax, or investment advice.</div>
     </div>
   </div>
 </footer>

@@ -86,6 +86,19 @@
     --nav-h:       86px;
     --serif:       'Newsreader', Georgia, 'Times New Roman', serif;
     --sans:        'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    /* motion: one easing curve and two durations for the whole page, so
+       nothing moves at a speed the rest of the site does not already use */
+    --ease:        cubic-bezier(0.22, 0.61, 0.36, 1);
+    --quick:       0.25s;
+    --settle:      0.7s;
+
+    /* depth: shadows are wide, soft and nearly colourless — the page is flat
+       by design, and these only lift a surface a millimetre off the paper */
+    --shadow-soft: 0 1px 2px rgba(20,18,28,0.04), 0 10px 30px -18px rgba(20,18,28,0.18);
+    --shadow-lift: 0 2px 6px rgba(20,18,28,0.05), 0 20px 44px -26px rgba(74,53,112,0.45);
+    --shadow-btn:  0 10px 24px -14px rgba(74,53,112,0.75);
+    --shadow-nav:  0 10px 30px -24px rgba(20,18,28,0.5);
   }
 
   html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
@@ -107,7 +120,11 @@
   .client-row > *, .tl-item > *, .svc, .eng, .stat, .cd > * { min-width: 0; }
   p, li, h1, h2, h3, summary, .cd-v, .stat-label { overflow-wrap: break-word; }
 
-  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+  .wrap {
+    max-width: var(--max); margin: 0 auto;
+    padding-left: max(var(--gutter), env(safe-area-inset-left));
+    padding-right: max(var(--gutter), env(safe-area-inset-right));
+  }
 
   h1, h2, h3, .serif {
     font-family: var(--serif);
@@ -130,7 +147,11 @@
   .label::before {
     content: ''; display: block; width: 34px; height: 2px;
     background: var(--purple); margin-bottom: 0.9rem;
+    transform: scaleX(0); transform-origin: left;
+    transition: transform var(--settle) var(--ease) 0.15s;
   }
+  .on .label::before { transform: scaleX(1); }
+  .center .label::before { transform-origin: center; }
   .center .label::before { margin-inline: auto; }
   .center .label { text-align: center; }
 
@@ -143,11 +164,14 @@
     padding: 0.95rem 2rem; border: 1px solid var(--purple);
     background: var(--purple); color: #fff; text-decoration: none;
     border-radius: 2px; cursor: pointer; text-align: center;
-    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    transition: background var(--quick) ease, color var(--quick) ease,
+                border-color var(--quick) ease,
+                transform var(--quick) var(--ease), box-shadow var(--quick) var(--ease);
   }
-  .btn:hover { background: var(--purple-deep); border-color: var(--purple-deep); }
+  .btn:active { background: var(--purple-deep); border-color: var(--purple-deep);
+                transform: translateY(0); box-shadow: none; }
   .btn-line { background: transparent; color: var(--purple); border-color: var(--line); }
-  .btn-line:hover { background: transparent; color: var(--purple-deep); border-color: var(--purple); }
+  .btn-line:active { background: transparent; color: var(--purple-deep); border-color: var(--purple); }
 
   section { padding: clamp(3.5rem, 9vw, 8.5rem) 0; }
   .tint { background: var(--sand); }
@@ -168,9 +192,14 @@
     background: rgba(255,255,255,0.94);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--line-soft);
+    transition: box-shadow 0.35s var(--ease), background 0.35s ease;
   }
+  /* the bar only earns a shadow once there is content behind it */
+  .nav.stuck { background: rgba(255,255,255,0.88); box-shadow: var(--shadow-nav); }
   .nav-inner {
-    max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter);
+    max-width: var(--max); margin: 0 auto;
+    padding-left: max(var(--gutter), env(safe-area-inset-left));
+    padding-right: max(var(--gutter), env(safe-area-inset-right));
     min-height: var(--nav-h);
     display: flex; align-items: center; gap: 1rem;
   }
@@ -187,17 +216,34 @@
   }
   .nav-links { display: flex; align-items: center; gap: clamp(1.1rem, 2vw, 2.2rem); }
   .nav-links a {
-    font-size: 0.9rem; color: var(--slate); text-decoration: none;
-    padding-bottom: 3px; border-bottom: 1px solid transparent;
-    transition: color 0.2s ease, border-color 0.2s ease;
+    position: relative; font-size: 0.9rem; color: var(--slate); text-decoration: none;
+    padding-bottom: 4px; transition: color 0.2s ease;
   }
-  .nav-links a:hover { color: var(--purple); border-bottom-color: var(--purple); }
-  .nav-links .cta { color: var(--purple); font-weight: 500; border-bottom-color: var(--purple-pale); }
+  .nav-links a::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+    background: var(--purple); transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s var(--ease);
+  }
+  .nav-links a:focus-visible::after { transform: scaleX(1); }
+  /* the section you are reading keeps its underline drawn */
+  .nav-links a.active { color: var(--purple); }
+  .nav-links a.active::after { transform: scaleX(1); }
+  .nav-links .cta { color: var(--purple); font-weight: 500; }
+  .nav-links .cta::after { background: var(--purple-pale); transform: scaleX(1); }
+  .nav-links .cta.active::after { background: var(--purple); }
   .nav-toggle {
     display: none; background: none; border: 0; cursor: pointer;
     padding: 0.6rem; margin-right: -0.6rem; color: var(--ink);
   }
-  .nav-toggle svg { width: 24px; height: 24px; }
+  .nav-toggle svg { width: 24px; height: 24px; display: block; }
+  /* the bars sit at y=8 and y=16; each slides to the centre line and turns,
+     so the icon reads as the state it will leave, not the one it is in */
+  .nav-toggle svg line {
+    transform-box: view-box; transform-origin: center;
+    transition: transform 0.35s var(--ease);
+  }
+  .nav-toggle[aria-expanded="true"] svg line:first-of-type { transform: rotate(45deg) translateY(4px); }
+  .nav-toggle[aria-expanded="true"] svg line:last-of-type { transform: rotate(-45deg) translateY(-4px); }
 
   /* ---------- hero ---------- */
   .hero { padding: clamp(3.5rem, 11vw, 10rem) 0 clamp(3rem, 7vw, 6rem); }
@@ -238,7 +284,12 @@
     gap: clamp(2.5rem, 7vw, 6rem); align-items: start;
   }
   .portrait { position: relative; }
-  .portrait img { width: 100%; filter: grayscale(0.18) contrast(1.02); }
+  .portrait-frame { overflow: hidden; box-shadow: var(--shadow-soft); }
+  .portrait img {
+    width: 100%; filter: grayscale(0.18) contrast(1.02);
+    transition: transform 0.9s var(--ease), filter 0.6s ease;
+  }
+
   .portrait figcaption {
     margin-top: 1.5rem; padding-top: 1.2rem;
     border-top: 2px solid var(--purple);
@@ -260,6 +311,15 @@
 
   /* ---------- quote band (the one bold moment) ---------- */
   .quote-band { background: var(--purple); color: #fff; padding: clamp(3.5rem, 8vw, 7rem) 0; }
+  .quote-band .wrap { position: relative; }
+  .quote-band .wrap::before {
+    content: '\201C'; position: absolute; z-index: 0;
+    top: -0.34em; left: calc(var(--gutter) - 0.09em);
+    font-family: var(--serif); font-weight: 400; line-height: 1;
+    font-size: clamp(7rem, 15vw, 12rem); color: rgba(255,255,255,0.09);
+    pointer-events: none; user-select: none;
+  }
+  .quote-band blockquote, .quote-band .quote-cite { position: relative; z-index: 1; }
   .quote-band blockquote {
     font-family: var(--serif); font-weight: 200;
     font-size: clamp(1.45rem, 3.6vw, 2.8rem); line-height: 1.3;
@@ -278,13 +338,19 @@
     border-top: 1px solid var(--line); border-left: 1px solid var(--line);
   }
   .svc {
+    position: relative;
     border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
     padding: clamp(1.6rem, 3vw, 2.6rem);
     background: var(--paper);
-    transition: background 0.25s ease;
+    transition: background var(--quick) ease, box-shadow 0.35s var(--ease);
   }
-  .svc:hover { background: var(--sand); }
-  .svc svg { width: 26px; height: 26px; stroke: var(--purple); fill: none; stroke-width: 1.2; margin-bottom: 1.6rem; }
+  /* a tap lights the card it landed on; the lift is for pointers (below) */
+  .svc:active { background: var(--sand); }
+  .svc svg {
+    width: 26px; height: 26px; stroke: var(--purple); fill: none; stroke-width: 1.2;
+    margin-bottom: 1.6rem; transition: transform 0.35s var(--ease);
+  }
+
   .svc h3 { font-size: 1.22rem; font-weight: 400; margin-bottom: 0.85rem; line-height: 1.3; }
   .svc p { font-size: 0.92rem; color: var(--muted); line-height: 1.7; }
 
@@ -342,7 +408,7 @@
     transition: color 0.2s ease;
   }
   summary::-webkit-details-marker { display: none; }
-  summary:hover { color: var(--purple); }
+  details[open] summary { color: var(--purple); }
   .chev { flex: none; width: 14px; height: 14px; margin-top: 0.45rem; position: relative; }
   .chev::before, .chev::after {
     content: ''; position: absolute; background: var(--purple);
@@ -355,6 +421,8 @@
     padding: 0 3rem 1.9rem 0; font-size: 0.96rem;
     color: var(--muted); max-width: 70ch;
   }
+  details[open] .faq-a { animation: answer 0.4s var(--ease) both; }
+  @keyframes answer { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
 
   /* ---------- contact ---------- */
   .contact-grid {
@@ -369,21 +437,37 @@
   .cd svg.glyph { fill: var(--purple); stroke: none; }
   .cd-k { font-size: 0.76rem; color: var(--muted); }
   .cd-v { font-size: 0.98rem; color: var(--ink); }
-  .cd-v a { color: var(--purple); text-decoration: none; border-bottom: 1px solid var(--purple-pale); }
-  .cd-v a:hover { border-bottom-color: var(--purple); }
+  .cd-v a {
+    position: relative; color: var(--purple); text-decoration: none;
+    border-bottom: 1px solid var(--purple-pale);
+  }
+  .cd-v a::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+    background: var(--purple); transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s var(--ease);
+  }
+  .cd-v a:focus-visible::after { transform: scaleX(1); }
 
-  .form { background: var(--paper); border: 1px solid var(--line); padding: clamp(1.4rem, 4vw, 3rem); }
+  .form {
+    background: var(--paper); border: 1px solid var(--line);
+    padding: clamp(1.4rem, 4vw, 3rem); box-shadow: var(--shadow-soft);
+    transition: box-shadow 0.4s var(--ease);
+  }
+  .form:focus-within { box-shadow: var(--shadow-lift); }
   .fg { margin-bottom: 1.7rem; }
   .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
   .form label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.5rem; }
   .form input, .form select, .form textarea {
     width: 100%; font-family: var(--sans); font-size: 1rem; color: var(--ink);
     background: transparent; border: 0; border-bottom: 1px solid var(--line);
-    border-radius: 0; padding: 0.65rem 0; transition: border-color 0.2s ease;
+    border-radius: 0; padding: 0.65rem 0;
+    transition: border-color 0.2s ease, box-shadow 0.3s var(--ease);
   }
   .form input::placeholder, .form textarea::placeholder { color: #a5a0b2; }
+  /* the rule under the focused field thickens instead of moving anything */
   .form input:focus, .form select:focus, .form textarea:focus {
     outline: none; border-bottom-color: var(--purple);
+    box-shadow: 0 1px 0 0 var(--purple);
   }
   .form textarea { resize: vertical; min-height: 100px; }
   .form select { appearance: none; cursor: pointer; }
@@ -420,22 +504,76 @@
     display: flex; flex-wrap: wrap; justify-content: center;
     gap: 0.8rem 2rem; margin: clamp(1.8rem, 4vw, 2.4rem) 0;
   }
-  .foot-links a { font-size: 0.88rem; color: rgba(255,255,255,0.62); text-decoration: none; transition: color 0.2s ease; }
-  .foot-links a:hover { color: #fff; }
+  .foot-links a {
+    position: relative; font-size: 0.88rem; color: rgba(255,255,255,0.62);
+    text-decoration: none; padding-bottom: 3px; transition: color 0.2s ease;
+  }
+  .foot-links a::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+    background: rgba(255,255,255,0.55); transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s var(--ease);
+  }
+  .foot-links a:focus-visible::after { transform: scaleX(1); }
   .foot-rule { height: 1px; background: rgba(255,255,255,0.13); }
   .foot-bottom { padding-top: 1.6rem; font-size: 0.79rem; color: rgba(255,255,255,0.58); line-height: 1.9; }
   .foot-disclaimer { max-width: 76ch; margin: 0.3rem auto 0; }
 
-  /* ---------- reveal ---------- */
-  .reveal { opacity: 0; transition: opacity 0.7s ease; }
-  .reveal.on { opacity: 1; }
+  /* ---------- pointer affordances ----------
+     Hover only where something can actually hover. On a touch screen :hover
+     latches after a tap, which would leave a card lit and a button raised
+     until the next tap lands somewhere else. */
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover { background: var(--purple-deep); border-color: var(--purple-deep);
+                 transform: translateY(-2px); box-shadow: var(--shadow-btn); }
+    .btn:active { transform: translateY(0); box-shadow: none; }
+    .btn-line:hover { background: transparent; color: var(--purple-deep); border-color: var(--purple);
+                      box-shadow: 0 10px 24px -16px rgba(20,18,28,0.45); }
+    .nav-links a:hover { color: var(--purple); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-links .cta:hover::after { background: var(--purple); }
+    /* the cell lifts off the sheet without leaving the grid it belongs to */
+    .svc:hover { background: var(--sand); box-shadow: var(--shadow-lift); z-index: 1; }
+    .svc:hover svg { transform: translateY(-2px); }
+    .portrait:hover img { transform: scale(1.03); filter: grayscale(0) contrast(1.02); }
+    summary:hover { color: var(--purple); }
+    .cd-v a:hover::after { transform: scaleX(1); }
+    .foot-links a:hover { color: #fff; }
+    .foot-links a:hover::after { transform: scaleX(1); }
+  }
+
+  /* a tap should feel like a press, not a hover that never lets go */
+  a, button, summary, .svc { -webkit-tap-highlight-color: transparent; }
+  @media (hover: none) {
+    .cd-v a:active::after, .foot-links a:active::after { transform: scaleX(1); }
+    summary:active { color: var(--purple); }
+  }
+
+  /* ---------- reveal ----------
+     Two shapes only: .reveal for a block that arrives whole, .r-item for the
+     children of a grid or list, which arrive in sequence. Both travel the
+     same 14px and use the same curve, so the page reads as one movement. */
+  .reveal, .r-item {
+    opacity: 0; transform: translateY(14px);
+    transition: opacity var(--settle) var(--ease), transform var(--settle) var(--ease);
+  }
+  .r-item { transition-delay: calc(var(--i, 0) * 80ms); }
+  .reveal.on, .r-item.on { opacity: 1; transform: none; }
+
+  /* the menu panel arrives rather than appearing */
+  @keyframes menu-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+  @keyframes menu-item { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
   /* without JavaScript nothing removes the starting opacity, so only arm the
      effect once the script has flagged the document */
-  html:not(.js) .reveal { opacity: 1; transition: none; }
+  html:not(.js) .reveal,
+  html:not(.js) .r-item { opacity: 1; transform: none; transition: none; }
+  html:not(.js) .label::before { transform: scaleX(1); }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    .reveal { opacity: 1; transition: none; }
+    .reveal, .r-item { opacity: 1; transform: none; }
+    .label::before { transform: scaleX(1); }
+    .portrait:hover img, .svc:hover svg, .btn:hover { transform: none; box-shadow: none; }
     *, *::before, *::after { animation: none !important; transition: none !important; }
   }
 
@@ -478,13 +616,54 @@
       display: none; position: absolute; top: var(--nav-h); left: 0; right: 0;
       flex-direction: column; align-items: stretch; gap: 0;
       background: #fff; border-bottom: 1px solid var(--line);
-      padding: 0.5rem var(--gutter) 1.5rem;
-      max-height: calc(100dvh - var(--nav-h)); overflow-y: auto;
+      box-shadow: var(--shadow-nav);
+      /* rows carry their own left padding and marker rule, so the panel gives
+         that width back and the labels still line up with the page gutter */
+      padding: 0.4rem
+               calc(max(var(--gutter), env(safe-area-inset-right)) - 0.85rem - 2px)
+               calc(1.1rem + env(safe-area-inset-bottom))
+               calc(max(var(--gutter), env(safe-area-inset-left)) - 0.85rem - 2px);
+      max-height: calc(100dvh - var(--nav-h));
+      overflow-y: auto; overscroll-behavior: contain;
     }
-    .js .nav-links.open { display: flex; }
+    .js .nav-links.open { display: flex; animation: menu-in 0.28s var(--ease) both; }
+    /* the links follow the panel down rather than landing with it */
+    .js .nav-links.open li { animation: menu-item 0.34s var(--ease) both; }
+    .js .nav-links.open li:nth-child(1) { animation-delay: 0.04s; }
+    .js .nav-links.open li:nth-child(2) { animation-delay: 0.08s; }
+    .js .nav-links.open li:nth-child(3) { animation-delay: 0.12s; }
+    .js .nav-links.open li:nth-child(4) { animation-delay: 0.16s; }
+    .js .nav-links.open li:nth-child(5) { animation-delay: 0.20s; }
+    .js .nav-links.open li:nth-child(6) { animation-delay: 0.24s; }
     .js .nav-links a {
-      display: block; padding: 0.85rem 0; width: 100%;
+      display: block; width: 100%;
+      padding: 0.95rem 0.85rem; font-size: 0.95rem;
+      border-left: 2px solid transparent;
       border-bottom: 1px solid var(--line-soft);
+      transition: color 0.2s ease, background 0.25s ease, border-left-color 0.25s ease;
+    }
+    /* the stacked list already has dividers; the drawn underline would double them */
+    .js .nav-links a::after { display: none; }
+
+    /* where you are now: a marker rule in the gutter and a tinted row */
+    .js .nav-links a.active:not(.cta) {
+      color: var(--purple); font-weight: 500;
+      background: var(--sand); border-left-color: var(--purple);
+    }
+
+    /* the one action in the panel is an action, not another line of the list */
+    .js .nav-links li:last-child { margin-top: 0.9rem; }
+    .js .nav-links .cta {
+      background: var(--purple); color: #fff; text-align: center;
+      border: 1px solid var(--purple); border-radius: 2px;
+      font-weight: 500; padding: 0.95rem 1rem;
+      /* the rows pay for their marker rule with padding; the button pays with
+         margin, so both edges land on the page gutter */
+      margin-left: calc(0.85rem + 1px); margin-right: calc(0.85rem + 1px);
+      width: auto;
+    }
+    .js .nav-links .cta:active, .js .nav-links .cta.active {
+      background: var(--purple-deep); border-color: var(--purple-deep);
     }
     /* no JavaScript: keep every link reachable as a wrapped row */
     html:not(.js) .nav-inner { flex-wrap: wrap; padding-top: 0.9rem; padding-bottom: 0.9rem; row-gap: 0.4rem; }
@@ -493,6 +672,17 @@
 
   /* phones */
   @media (max-width: 720px) {
+    /* A wide, faint desktop shadow reads as haze on a 390px screen. Phones
+       get the opposite: a shorter throw with less negative spread, so the
+       edge stays legible at arm's length. */
+    :root {
+      --shadow-soft: 0 2px 4px -2px rgba(20,18,28,0.10), 0 10px 24px -8px rgba(20,18,28,0.28);
+      --shadow-lift: 0 2px 6px -2px rgba(20,18,28,0.12), 0 16px 30px -10px rgba(74,53,112,0.50);
+      --shadow-nav:  0 10px 22px -6px rgba(20,18,28,0.34), 0 3px 6px -3px rgba(20,18,28,0.14);
+    }
+    /* thumbs, not cursors */
+    .foot-links { gap: 0.3rem 1.5rem; }
+    .foot-links a { padding: 0.45rem 0; }
     .svc-grid, .stats-grid, .eng-grid { grid-template-columns: 1fr; }
     .stat + .stat { border-left: 0; padding-left: 0; border-top: 1px solid var(--line); }
     .stat:nth-child(3) { margin-top: 0; }
@@ -799,7 +989,9 @@
     <div class="wrap">
       <div class="about-grid">
         <figure class="portrait reveal">
-          <img src="reema-keen.jpg" alt="Reema Keen, Founder and Principal of ComplyOn LLC" width="936" height="1245" loading="lazy" decoding="async">
+          <div class="portrait-frame">
+            <img src="reema-keen.jpg" alt="Reema Keen, Founder and Principal of ComplyOn LLC" width="936" height="1245" loading="lazy" decoding="async">
+          </div>
           <figcaption>
             <div class="portrait-name">Reema Keen</div>
             <div class="portrait-role">Founder &amp; Principal, ComplyOn LLC</div>
@@ -1287,18 +1479,146 @@
       });
     });
 
-    /* ---------- reveal on scroll ---------- */
+    /* ---------- depth: the bar earns its shadow once the page moves ---------- */
+    var nav = document.querySelector('.nav');
+    var ticking = false;
+    function markScroll() {
+      nav.classList.toggle('stuck', window.scrollY > 8);
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; window.requestAnimationFrame(markScroll); }
+    }, { passive: true });
+    markScroll();
+
+    /* ---------- which section you are reading ----------
+       Each nav link points at a section; the one whose top sits in a band a
+       fifth of the way down the viewport is the one you are in, and its
+       underline stays drawn. */
+    var linkFor = new Map();
+    document.querySelectorAll('.nav-links a[href^="#"]').forEach(function (a) {
+      var section = document.getElementById(a.getAttribute('href').slice(1));
+      if (section) { linkFor.set(section, a); }
+    });
+
+    if (linkFor.size && 'IntersectionObserver' in window) {
+      var inBand = new Set();
+      var sections = Array.from(linkFor.keys());
+
+      var held = null;
+
+      function markCurrent() {
+        var current = sections.filter(function (s) { return inBand.has(s); })[0];
+        /* Engagements has no nav link, so the band can come up empty mid-page.
+           Hold the last section rather than blinking the underline off, and
+           only clear it once the reader is back above the first section. */
+        if (!current) {
+          if (window.scrollY < sections[0].offsetTop - 120) { held = null; }
+          current = held;
+        }
+        held = current;
+        linkFor.forEach(function (a, s) {
+          var here = s === current;
+          a.classList.toggle('active', here);
+          if (here) { a.setAttribute('aria-current', 'true'); }
+          else { a.removeAttribute('aria-current'); }
+        });
+      }
+
+      var spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { inBand.add(en.target); } else { inBand.delete(en.target); }
+        });
+        markCurrent();
+      }, { rootMargin: '-20% 0px -65% 0px', threshold: 0 });
+
+      sections.forEach(function (s) { spy.observe(s); });
+    }
+
+    /* ---------- motion ----------
+       Everything arrives the same way: fade up 14px. What changes is the
+       company it keeps — items that come into view together are staggered by
+       position, so a three-across grid ripples left to right while the same
+       grid stacked on a phone arrives one card at a time, as each is reached.
+       Only transform and opacity move, so nothing here can shift the layout. */
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var items = document.querySelectorAll('.reveal');
+
+    /* section furniture the markup does not flag, added here rather than in
+       the HTML so a visitor without JavaScript never sees a hidden element */
+    ['.head-split', '.stats-grid', '.stats-note', '#faq .center', '.quote-band blockquote', '.quote-band .quote-cite']
+      .forEach(function (sel) {
+        document.querySelectorAll(sel).forEach(function (el) { el.classList.add('reveal'); });
+      });
+
+    /* A group hands its own .reveal to its children, which are then watched
+       one by one: [container, child]. On a stacked layout that is what keeps
+       a long grid from playing its whole sequence off screen. */
+    var groups = [
+      ['.svc-grid', '.svc'],
+      ['.eng-grid', '.eng'],
+      ['.stats-grid', '.stat'],
+      ['.creds', 'span'],
+      ['#clients .reveal', '.client-row'],
+      ['#experience .reveal', '.tl-item'],
+      ['.faq-list', 'details']
+    ];
+
+    groups.forEach(function (g) {
+      document.querySelectorAll(g[0]).forEach(function (box) {
+        var kids = box.querySelectorAll(g[1]);
+        if (!kids.length) { return; }
+        box.classList.remove('reveal');
+        kids.forEach(function (el) { el.classList.add('r-item'); });
+      });
+    });
+
+    var arrivals = document.querySelectorAll('.reveal, .r-item');
+
+    function arrive(el, step) {
+      el.style.setProperty('--i', step);
+      el.classList.add('on');
+    }
+
     if (reduce || !('IntersectionObserver' in window)) {
-      items.forEach(function (el) { el.classList.add('on'); });
+      arrivals.forEach(function (el) { arrive(el, 0); });
     } else {
       var obs = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) {
-          if (en.isIntersecting) { en.target.classList.add('on'); obs.unobserve(en.target); }
+        /* everything in this batch crossed the line together: order it by
+           row, then left to right, and cap the cascade at five steps */
+        var here = entries.filter(function (en) { return en.isIntersecting; })
+          .sort(function (a, b) {
+            var top = a.boundingClientRect.top - b.boundingClientRect.top;
+            return Math.abs(top) > 8 ? top : a.boundingClientRect.left - b.boundingClientRect.left;
+          });
+
+        var row = -1, col = 0, lastTop = null;
+        here.forEach(function (en) {
+          var top = en.boundingClientRect.top;
+          if (lastTop === null || Math.abs(top - lastTop) > 8) { row += 1; col = 0; lastTop = top; }
+          else { col += 1; }
+          arrive(en.target, Math.min(row + col, 4));
+          obs.unobserve(en.target);
         });
-      }, { threshold: 0.08 });
-      items.forEach(function (el) { obs.observe(el); });
+      }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+      arrivals.forEach(function (el) { obs.observe(el); });
+    }
+
+    /* The hero is already on screen, so it arrives on load rather than on
+       scroll — headline first, then the paragraph and the two buttons. */
+    var heroParts = [document.querySelector('.hero h1'),
+                     document.querySelector('.hero-body p'),
+                     document.querySelector('.hero-actions')].filter(Boolean);
+    if (!reduce) {
+      heroParts.forEach(function (el, i) {
+        el.classList.add('r-item');
+        el.style.setProperty('--i', i);
+      });
+      window.requestAnimationFrame(function () {
+        window.requestAnimationFrame(function () {
+          heroParts.forEach(function (el) { el.classList.add('on'); });
+        });
+      });
     }
   })();
 </script>

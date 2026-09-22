@@ -112,6 +112,65 @@ script can never leave a visitor with a button that opens nothing. The
 scroll reveal is gated the same way, so nothing can be stranded at opacity
 0.
 
+## Motion and depth
+
+Two custom properties carry the whole motion system: `--ease` (one curve) and
+`--settle` / `--quick` (one slow duration for arrivals, one fast one for
+hovers). Nothing animates on a timing the rest of the page does not already
+use, and only `opacity` and `transform` are animated, so none of it can shift
+the layout — Lighthouse still reports a cumulative layout shift of 0.
+
+Everything arrives the same way — fade up 14px — and one IntersectionObserver
+watches every element individually. What changes is the company an element
+keeps: items that cross into view in the same batch are ordered by row and
+then left to right, and the `--i` custom property the script sets on each one
+staggers them 80ms apart, capped at five steps. A three-across grid therefore
+ripples left to right, while the same grid stacked on a phone arrives one card
+at a time as each is reached — which is the point of watching items rather
+than their container, since a phone-height grid would otherwise play its whole
+sequence off screen. The hero uses the same mechanism but fires on load, as it
+is already in view.
+
+Both are gated behind the `js` class on `<html>`: without JavaScript every
+element renders at full opacity, and the reduced-motion block resets the
+starting transforms as well as disabling transitions, so nothing can be left
+mid-animation or invisible.
+
+Hover effects live in one `@media (hover: hover) and (pointer: fine)` block.
+On a touch screen `:hover` latches after a tap, which would otherwise leave a
+service card lit and a button raised until the next tap landed somewhere else;
+touch gets `:active` press states instead, and the tap highlight is suppressed.
+Phones also override the shadow tokens with tighter spreads — a 44px blur that
+reads as depth on a desktop reads as haze on a 390px screen — and the footer
+links get thumb-sized padding. Both gutters use `max(var(--gutter),
+env(safe-area-inset-*))`, so a notched phone in landscape keeps its margins.
+
+Shadows are tokens too — `--shadow-soft`, `--shadow-lift`, `--shadow-btn`,
+`--shadow-nav` — all wide, soft and nearly colourless. The page is flat by
+design; these lift a surface a millimetre off the paper rather than floating
+it. They appear on the sticky header once the page has scrolled (`.nav.stuck`,
+toggled from a passive scroll listener), on a hovered service card, on the
+contact panel, and under the buttons and the portrait.
+
+A second observer follows the reader: whichever section sits in a band a
+fifth of the way down the viewport marks its nav link `.active`, which keeps
+that link's underline drawn and sets `aria-current`. Engagements has no nav
+link, so when the band comes up empty the previous link is held rather than
+blinking off; it clears only when the reader is back above the first section.
+On phones the panel marks the current section with a tinted row and a purple
+rule in the gutter rather than an underline, since the stacked links already
+carry dividers. The panel's rows pay for that marker rule with left padding
+and the Contact button pays with margin, so both land on the page gutter. The
+toggle's two bars slide to the centre line and turn 45° into a cross, driven
+off the `aria-expanded` attribute the menu script already maintains — the
+state the button announces and the state it draws cannot drift apart.
+
+The remaining detail work is CSS-only: the rule above each section label draws
+itself in, nav and footer links grow an underline from the left, the focused
+form field thickens its rule, an FAQ answer fades up as it opens, the portrait
+warms out of greyscale and scales 3% inside a clipping frame, and the quote
+band carries an oversized quotation mark at 9% white.
+
 ## Deployment
 
 `npm run build` produces a self-contained `dist/` directory that any static

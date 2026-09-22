@@ -10,8 +10,8 @@
     "lighthouse": "npm run build && lhci autorun"
   },
   "devDependencies": {
-    "@fontsource/cormorant-garamond": "^5.3.0",
-    "@fontsource/dm-sans": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/newsreader": "^5.3.0",
     "@lhci/cli": "^0.15.1",
     "vite": "^7.1.5"
   }

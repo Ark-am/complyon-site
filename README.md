@@ -26,6 +26,7 @@ reloads the page whenever you save.
 | `npm run dev` | Start the Vite dev server with live reload. |
 | `npm run build` | Build a static site into `dist/`. |
 | `npm run preview` | Serve the built `dist/` locally to check it before deploying. |
+| `npm run lighthouse` | Build, then audit the output with Lighthouse CI. |
 
 ## Layout
 
@@ -97,3 +98,41 @@ inconsistent — several block the submission outright, and where it does work
 it opens the visitor's email client rather than sending anything itself.
 Moving to a form service or a small backend endpoint is worth considering if
 the form needs to be dependable.
+
+## Lighthouse CI
+
+`npm run lighthouse` builds the site and runs Lighthouse against `dist/`
+three times, reporting the median. Configuration is in `lighthouserc.json`;
+HTML and JSON reports land in `.lighthouseci/` (git-ignored) — open the
+`.report.html` file for the full breakdown.
+
+Baseline at the time of setup (mobile form factor):
+
+| Category | Score |
+| --- | --- |
+| Performance | 98 |
+| Accessibility | 87 |
+| Best Practices | 100 |
+| SEO | 100 |
+
+The thresholds in `lighthouserc.json` are set at that baseline, so the run
+passes today and fails on a regression. Accessibility is pinned at 0.87
+rather than something higher because of the known issues below; **raise it
+once they are fixed**, otherwise the bar stays where the bugs are.
+
+### Known issues the audit reports
+
+1. **`definition-list` / `dlitem`** — in the contact section the `<dt>` and
+   `<dd>` elements sit two `<div>` levels below their `<dl>`. Only one level
+   of `<div>` is permitted between them, so assistive technology does not
+   read the pairs as a definition list. Fixing means flattening
+   `.detail` markup.
+2. **`heading-order`** — an `<h3>` appears without an `<h2>` above it in the
+   sequence, so the outline skips a level.
+3. **`modern-image-formats` / `uses-responsive-images`** — the founder photo
+   is a 936×1245 JPEG displayed at roughly a third of that. A WebP or AVIF
+   at display size saves about 85 kB.
+4. **`unminified-css`** — expected; nothing minifies the inline CSS yet.
+
+All four are set to `warn`, so they appear in the output without failing the
+run.

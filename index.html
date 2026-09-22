@@ -5,8 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ComplyOn LLC — Independent Compliance &amp; Risk Advisory</title>
 <meta name="theme-color" content="#3b2d6e">
-<meta name="description" content="ComplyOn LLC is an Atlanta-based independent compliance and risk advisory practice serving investment advisers, OCIOs, pension funds and digital asset firms.">
+<meta name="description" content="ComplyOn LLC is an Atlanta-based independent compliance and risk advisory practice serving investment advisers, OCIOs, pension funds, and digital asset firms.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 38'><path d='M2 3 L10 3 L16 0 L22 3 L30 3 L30 20 Q30 33 16 38 Q2 33 2 20 Z' fill='%234A3570'/><text x='16' y='19' text-anchor='middle' font-family='Georgia,serif' font-size='11' font-weight='700' fill='%23EDE8F7'>CO</text></svg>">
+<meta name="author" content="Reema Keen">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<!-- Social/link-preview cards. og:url and og:image need absolute URLs, so they
+     are added once the site is live on its own domain (see README). -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ComplyOn LLC">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="ComplyOn LLC — Independent Compliance &amp; Risk Advisory">
+<meta property="og:description" content="Senior compliance and risk advisory for institutional asset managers, investment advisers, OCIOs, pension funds, and digital asset firms.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ComplyOn LLC — Independent Compliance &amp; Risk Advisory">
+<meta name="twitter:description" content="Senior compliance and risk advisory for institutional asset managers, investment advisers, OCIOs, pension funds, and digital asset firms.">
 <!-- Fonts are self-hosted from fonts/ (copied out of @fontsource, see
      README). No request leaves this origin to render the page. The two
      faces used above the fold are preloaded; the rest resolve from the
@@ -148,6 +160,23 @@
   }
   .cta:hover { background: #fff; }
 
+  /* menu button: hidden everywhere except phones (see the max-width:639px
+     block), and only once .has-js confirms the script is running */
+  .nav-toggle {
+    display: none; background: none; border: 0; padding: .4rem;
+    color: #fff; cursor: pointer; line-height: 0;
+    transition: color .25s var(--ease), transform .25s var(--ease);
+  }
+  .nav-toggle svg {
+    width: 26px; height: 26px; display: block;
+    fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round;
+  }
+  .nav-toggle svg line { transition: transform .28s var(--ease); transform-origin: center; }
+  .nav-toggle:hover { color: var(--gold); }
+  /* the two rules cross into an X while the menu is open */
+  header.nav-open .nav-toggle svg line:first-child { transform: translateY(3px) rotate(45deg); }
+  header.nav-open .nav-toggle svg line:last-child { transform: translateY(-3px) rotate(-45deg); }
+
   /* ---------- hero ---------- */
   .hero {
     background: linear-gradient(135deg, #2a1f55, #3b2d6e 55%, #4e3d85);
@@ -186,6 +215,11 @@
   .stats span {
     font-size: .64rem; letter-spacing: .15em;
     text-transform: uppercase; color: var(--muted);
+  }
+  /* provenance line under the figures - deliberately quiet */
+  .stats-note {
+    font-size: .62rem; line-height: 1.5; color: var(--muted);
+    border-top: 1px solid rgba(196, 181, 232, .18); padding-top: .9rem;
   }
 
   .glance {
@@ -299,6 +333,10 @@
     content: ""; position: absolute; left: 0; top: .62rem;
     width: 5px; height: 5px; border-radius: 50%; background: var(--gold);
   }
+  .job p.text {
+    font-size: .88rem; line-height: 1.7; max-width: 72ch;
+    color: rgba(196, 181, 232, .78);
+  }
 
   /* ---------- industries ---------- */
   .ind { text-align: center; }
@@ -371,6 +409,10 @@
     align-items: center; justify-content: space-between;
   }
   footer .logo { font-size: 1.1rem; }
+  /* The footer inherits --muted, which is only 3.25:1 on --deep and fails
+     WCAG AA. The credit line now carries visible text of its own, so it sets
+     a compliant colour; #afa0d9 measures 4.96:1. */
+  .credit { color: #afa0d9; }
   .credit a {
     color: var(--light); text-decoration: underline;
     text-underline-offset: 2px; text-decoration-thickness: 1px;
@@ -534,16 +576,29 @@
     .card, .glance { max-width: 340px; }
   }
 
-  /* Compact one-row header for the 640-860px band: unfolded foldables
-     (Z Fold 5 = 673px, Z Fold 6 = 686px) and small tablets. Desktop nav
-     metrics need 633px and only 625px is free at 673px, so tighten. */
+  /* 640-860px band: unfolded foldables (Z Fold 5 = 673px, Z Fold 6 = 686px)
+     and small tablets. This used to be a tightened one-row header, but five
+     nav destinations no longer fit on one line at 673px -- the last link
+     wrapped on its own and read as broken. It now uses the same two-row grid
+     as phones: logo + Contact on row 1, the links spread across row 2. */
   @media (min-width: 640px) and (max-width: 860px) {
-    .logo { font-size: 1.25rem; }
+    .bar {
+      display: grid; grid-template-columns: 1fr auto;
+      align-items: center; gap: 8px 12px; padding: 12px 24px; min-height: 0;
+    }
+    .nav-group { display: contents; }
+    .logo { grid-column: 1; grid-row: 1; justify-self: start; font-size: 1.25rem; }
     .logo small { font-size: .54rem; letter-spacing: .13em; }
-    nav ul { gap: 1.5rem; }
-    nav a { font-size: .71rem; letter-spacing: .09em; }
-    .nav-group { gap: 1.5rem; }
-    .cta { font-size: .68rem; padding: .45rem .9rem; }
+    .cta {
+      grid-column: 2; grid-row: 1; justify-self: end;
+      font-size: .68rem; padding: .45rem .9rem;
+    }
+    nav { grid-column: 1 / -1; grid-row: 2; }
+    nav ul { justify-content: space-between; gap: .35rem 1rem; }
+    nav a { font-size: .71rem; letter-spacing: .08em; display: inline-block; padding: .45rem 0; }
+    /* measured from the text, not the tap padding - see the phone block */
+    nav a::after { bottom: calc(.45rem - 3px); }
+    [id] { scroll-margin-top: 104px; }
   }
 
   /* Desktop (861px+): the bar has room to breathe, so scale the header up
@@ -560,6 +615,18 @@
     /* keep in sync with .bar min-height: the sticky header would otherwise
        cover the top of whatever section a nav link jumps to */
     [id] { scroll-margin-top: 88px; }
+  }
+
+  /* The nav carries five destinations since "Who we serve" and "Track record"
+     were added, which no longer fit on one row between 861 and 1100px.
+     Tighten the metrics across that band rather than let the bar wrap. */
+  @media (min-width: 861px) and (max-width: 1099px) {
+    .logo { font-size: 1.32rem; letter-spacing: .02em; }
+    .logo small { font-size: .54rem; letter-spacing: .12em; }
+    nav ul { gap: 1.1rem; }
+    nav a { font-size: .7rem; letter-spacing: .07em; }
+    .nav-group { gap: 1.2rem; }
+    .cta { font-size: .7rem; padding: .5rem .85rem; }
   }
 
   /* ---------- large desktop ----------
@@ -591,7 +658,7 @@
     /* header stays pinned here too; it is a two-row grid and so costs
        ~102px, which is why .scrolled below trims it once you start
        scrolling. Keep this in sync with the scroll-margin-top below. */
-    [id] { scroll-margin-top: 92px; }
+    [id] { scroll-margin-top: 124px; }
     /* logo left + Contact top-right on row 1, nav links across row 2 */
     .bar {
       display: grid; grid-template-columns: 1fr auto;
@@ -601,12 +668,41 @@
     .logo { grid-column: 1; grid-row: 1; justify-self: start; }
     .cta { grid-column: 2; grid-row: 1; justify-self: end; }
     nav { grid-column: 1 / -1; grid-row: 2; }
-    nav ul { justify-content: space-between; gap: .35rem .6rem; }
-    nav a { font-size: .72rem; display: inline-block; padding: .5rem 0; }
+    /* No-JS fallback: the links stay on row 2 of the bar and wrap onto two
+       lines, packed from the left so the wrap looks deliberate. With JS the
+       rules below replace this with the drop-down panel. */
+    nav ul { justify-content: flex-start; gap: .1rem 1.15rem; }
+    nav a { font-size: .7rem; letter-spacing: .08em; display: inline-block; padding: .4rem 0; }
+
+    /* ---- hamburger menu ---- */
+    .bar { grid-template-columns: 1fr auto auto; }
+    .has-js .nav-toggle { display: inline-flex; grid-column: 3; grid-row: 1; justify-self: end; }
+    .has-js .cta { grid-column: 2; }
+
+    /* Lifting the nav out of the grid is what buys the space back: the bar
+       collapses to a single row and the links become a panel below it. */
+    .has-js nav {
+      position: absolute; top: 100%; left: 0; right: 0;
+      background: var(--deep);
+      border-bottom: 1px solid rgba(196, 181, 232, .15);
+      box-shadow: 0 16px 32px rgba(30, 26, 46, .38);
+      padding: .25rem 24px .9rem;
+      opacity: 0; visibility: hidden; transform: translateY(-8px);
+      transition: opacity .24s var(--ease), transform .24s var(--ease), visibility .24s;
+    }
+    .has-js header.nav-open nav { opacity: 1; visibility: visible; transform: none; }
+    .has-js nav ul { flex-direction: column; align-items: stretch; gap: 0; }
+    .has-js nav li + li a { border-top: 1px solid rgba(196, 181, 232, .12); }
+    .has-js nav a { display: block; padding: .95rem 0; font-size: .76rem; letter-spacing: .12em; }
+    /* the sliding underline belongs to the horizontal bar, not a stacked list */
+    .has-js nav a::after { display: none; }
+
+    /* header is one row again, so anchors need far less clearance */
+    .has-js [id] { scroll-margin-top: 72px; }
     /* the links keep their .5rem tap padding, so measure the underline from
        the text rather than the padding box -- otherwise it lands on the
        progress bar at the header's bottom edge */
-    nav a::after { bottom: calc(.5rem - 3px); }
+    nav a::after { bottom: calc(.4rem - 3px); }
     .cta { font-size: .7rem; padding: .5rem 1rem; }
   }
 
@@ -667,46 +763,265 @@
     .stats span { font-size: .6rem; letter-spacing: .12em; }
   }
 </style>
+<!-- Structured data for search engines and AI answer engines. Generated
+     from the page content below - keep in sync when the FAQ or services
+     change. On launch add "url"/"@id" keys pointing at the live domain. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfessionalService",
+      "name": "ComplyOn LLC",
+      "alternateName": "ComplyOn",
+      "description": "Independent compliance and risk advisory practice serving investment advisers, OCIOs, pension funds, endowments and foundations, venture and emerging managers, and digital asset managers and funds.",
+      "slogan": "Compliance programs built to withstand examination.",
+      "email": "reema.keen@complyonllc.com",
+      "telephone": "+1-646-896-4191",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Atlanta",
+        "addressRegion": "GA",
+        "addressCountry": "US"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "United States"
+      },
+      "serviceType": "Regulatory compliance and risk advisory",
+      "founder": {
+        "@type": "Person",
+        "name": "Reema Keen",
+        "sameAs": "https://www.linkedin.com/in/reema-keen-57a8b77/"
+      },
+      "knowsAbout": [
+        "SEC and state regulatory compliance",
+        "Anti-money laundering (AML)",
+        "OFAC sanctions screening",
+        "ERISA and DOL advisory",
+        "Operational due diligence",
+        "Governance, risk and controls",
+        "Fractional Chief Compliance Officer services",
+        "Digital asset compliance",
+        "Contract review and advisory"
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Compliance advisory services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "SEC and state regulatory compliance",
+              "description": "Examination readiness, Form ADV review, compliance program assessments, surveillance, conflicts of interest management, and regulatory filing support for registered advisers."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "AML, OFAC & financial crime",
+              "description": "Program design, gap assessments, OFAC screening frameworks, and enforcement action remediation support."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Operational due diligence",
+              "description": "ODD frameworks for OCIO platforms and institutional allocators overseeing external managers, covering custody, AML, valuation, and third-party risk across investment managers spanning public, private, illiquid, and offshore fund structures."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Contract review & advisory",
+              "description": "Compliance-focused review of NDAs, investment management and sub-advisory agreements, custodian agreements, and LPAs — identifying regulatory risk and governance gaps before execution."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Governance, risk & controls",
+              "description": "Enterprise GRC framework design, board and committee governance review, cybersecurity policy development, control testing, escalation protocols, and board-level reporting infrastructure."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "ERISA & DOL advisory",
+              "description": "Governance and fiduciary compliance, prohibited transaction analysis, and operational due diligence frameworks for pension and institutional investment environments."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Fractional CCO services",
+              "description": "Dedicated compliance leadership on a part-time basis — program ownership, compliance training, and regulatory interface, scaled to the size and stage of your organization."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Ongoing compliance support",
+              "description": "Recurring support alongside your existing team — compliance calendar management, annual review and risk assessment, and advice on new or amended regulations, at whatever cadence your firm needs."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Digital asset frameworks",
+              "description": "AML, custody, and safeguarding frameworks for investment advisers and funds with digital asset exposure, applying institutional compliance standards to requirements emerging under SEC, CFTC, and FinCEN rules and regulations."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "@type": "Person",
+      "name": "Reema Keen",
+      "jobTitle": "Founder & Principal",
+      "sameAs": "https://www.linkedin.com/in/reema-keen-57a8b77/",
+      "description": "Compliance and risk leader with more than sixteen years building and overseeing regulatory compliance programs across SEC-registered investment advisers, institutional pension funds, broker-dealers and global financial institutions.",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "ComplyOn LLC"
+      },
+      "homeLocation": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Atlanta",
+          "addressRegion": "GA",
+          "addressCountry": "US"
+        }
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Do you provide compliance services for broker-dealers?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. ComplyOn focuses exclusively on investment advisers, OCIOs, pension funds, endowments and foundations, venture and emerging managers, and digital asset managers and funds. Reema's background includes broker-dealer compliance experience, but the firm does not currently offer broker-dealer compliance services."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do regulators allow an outsourced or fractional Chief Compliance Officer?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The CCO may be in-house or outsourced, provided the individual is knowledgeable about applicable regulations and has sufficient authority and access to senior management to implement and enforce the compliance program."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What does an engagement cost?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It depends on scope. Fractional CCO engagements are billed as a monthly retainer, ongoing support as a retainer or hourly rate, and project-based work as an hourly or flat fee. A proposal follows an initial conversation about your firm and needs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you work with firms that don't yet have a registered adviser or a formal compliance program?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. ComplyOn supports firms building a compliance program from the ground up, including registration support, initial policy drafting, and governance infrastructure — as well as firms with mature programs seeking an experienced second set of eyes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can you support a firm with digital asset exposure?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. ComplyOn works with investment advisers and funds with digital asset exposure, building AML, custody, and safeguarding frameworks that apply institutional compliance standards to requirements emerging under SEC, CFTC, and FinCEN rules and regulations."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do you help firms keep pace with regulatory change?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Through ongoing compliance support or a defined project, ComplyOn tracks new and amended rules relevant to your firm, assesses their impact on your program, and helps implement the policy, procedural, and operational changes they require — before an examination tests them."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you work alongside other professionals?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Reema leads each engagement personally and works alongside a client's legal counsel, auditors, fund administrators, and technology providers, bringing in trusted specialist partners where an engagement calls for additional expertise or capacity. ComplyOn provides compliance consulting and does not provide legal, tax, or investment advice."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
 <header>
   <div class="wrap bar">
-    <a class="logo" href="#top">COMPLY<span>ON</span><span class="ghost">-LADY</span><small>LLC &middot; Compliance Advisory</small></a>
+    <a class="logo" href="#top">COMPLY<span>ON</span><span class="ghost">-LADY</span><small>Compliance & Risk Advisory</small></a>
     <div class="nav-group">
-      <nav>
+      <nav aria-label="Primary" id="primary-nav">
         <ul>
           <li><a href="#about">About</a></li>
           <li><a href="#services">Services</a></li>
-          <li><a href="#experience">Experience</a></li>
-          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#clients">Who we serve</a></li>
+          <li><a href="#experience">Track record</a></li>
+          <li><a href="#faq">Questions</a></li>
         </ul>
       </nav>
       <a class="cta" href="#contact">Contact</a>
     </div>
+    <!-- Phone-only menu button. Hidden until the script adds .has-js, so a
+         visitor without JavaScript keeps the full nav row instead of a
+         button that cannot open anything. -->
+    <button class="nav-toggle" type="button" aria-label="Open menu"
+            aria-expanded="false" aria-controls="primary-nav">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <line x1="3" y1="9" x2="21" y2="9"/>
+        <line x1="3" y1="15" x2="21" y2="15"/>
+      </svg>
+    </button>
   </div>
 </header>
+
+<main>
 
 <div class="hero" id="top">
   <div class="wrap hero-grid">
     <div>
     <p class="tag">Independent Compliance Advisory</p>
-    <h1>Where <em>precision</em> meets<br>regulatory expertise.</h1>
+    <h1>Compliance programs built<br>to withstand <em>examination</em>.</h1>
     <p>
-      <strong>Institutional-grade compliance leadership — without the institutional overhead.</strong>
-      Senior-level compliance and risk advisory for institutional asset managers, investment advisers,
-      OCIOs, pension funds, and digital asset firms. Built on 16+ years at the intersection of
-      regulation, governance, and operational excellence.
+      <strong>Institutional-grade compliance leadership, without the institutional overhead.</strong>
+      ComplyOn LLC provides senior compliance and risk advisory to institutional asset managers,
+      investment advisers, OCIOs, pension funds, and digital asset firms — built on more than sixteen
+      years at the intersection of regulation, governance, and operations.
     </p>
     <div class="btns">
-      <a class="btn btn-solid" href="#services">Our Services</a>
-      <a class="btn btn-ghost" href="#contact">Schedule a Consultation</a>
+      <a class="btn btn-solid" href="#services">See our services</a>
+      <a class="btn btn-ghost" href="#contact">Schedule a consultation</a>
     </div>
     </div>
     <aside class="stats">
-      <div><b>16+</b><span>Years Experience</span></div>
-      <div><b>$53B+</b><span>Assets Overseen</span></div>
-      <div><b>0</b><span>Audit Findings</span></div>
+      <div><b>16+</b><span>Years leading regulatory compliance programs</span></div>
+      <div><b>$53B+</b><span>Institutional assets under compliance oversight</span></div>
+      <div><b>Zero</b><span>Findings across eight internal and three external audits</span></div>
+      <p class="stats-note">Figures reflect cumulative professional experience of the founder.</p>
     </aside>
   </div>
 </div>
@@ -728,25 +1043,23 @@
           <div><dt>Experience</dt><dd>16+ years in compliance and risk</dd></div>
           <div><dt>Most recent role</dt><dd>Managing Director &amp; CCO, SEC-registered OCIO</dd></div>
           <div><dt>Certification</dt><dd>CAMS candidate</dd></div>
-          <div><dt>Audit record</dt><dd>11+ internal and external audits, zero findings</dd></div>
+          <div><dt>Audit record</dt><dd>Eight internal and three external audits, zero findings</dd></div>
           <div><dt>Based in</dt><dd>Atlanta, Georgia &middot; serving clients nationwide</dd></div>
         </dl>
         <!-- Add education, Series licenses or bar admissions here if you'd like them listed. -->
       </div>
     </div>
     <div>
-      <p class="tag">About ComplyOn LLC</p>
+      <p class="tag">About the firm</p>
       <h2>Senior compliance expertise, delivered with precision.</h2>
-      <p>ComplyOn LLC is an Atlanta-based independent compliance and risk advisory practice founded by Reema Keen, a compliance leader with more than 16 years of experience building and overseeing regulatory compliance programs across SEC-registered investment advisers, institutional pension funds, and global financial institutions.</p>
-      <p>Most recently, Reema served as Managing Director and Chief Compliance Officer at a $3.5 billion SEC-registered OCIO firm, where she institutionalized the compliance program from the ground up — leading Form ADV review, annual review audits, and custody audit coordination, and bringing the firm to full SEC examination readiness. Prior to that, she held senior compliance and operations leadership roles at UPS Investments Group, a $50B+ institutional pension fund, owning governance, operational due diligence, cybersecurity risk, and third-party risk frameworks across 200+ investment managers spanning single-manager and multi-manager platforms — experience that gave her particular fluency in the sub-adviser oversight and governance challenges facing manager-of-managers structures. Earlier in her career, she supported enterprise-wide AML/BSA remediation following a DOJ consent order.</p>
-      <p>While Reema's direct professional experience to date has been built entirely within traditional financial services, the competencies she has developed — AML/BSA program design, custody and safeguarding frameworks, enforcement action remediation, and institutional governance — form the regulatory foundation upon which digital asset compliance programs are built. As the industry matures under increasing SEC, FinCEN, and DOL oversight, Reema brings the institutional rigor and regulatory depth that emerging digital asset firms require as they build compliance infrastructure designed to withstand examination.</p>
-      <p>ComplyOn LLC brings institutional-grade rigor to organizations that need it — without the overhead of a large firm.</p>
+      <p>ComplyOn LLC is an Atlanta-based independent compliance and risk advisory practice founded by Reema Keen, a compliance leader with more than sixteen years of experience building and overseeing regulatory compliance programs across SEC-registered investment advisers, institutional pension funds, broker-dealers, and global financial institutions.</p>
+      <p>Most recently, Reema served as Managing Director and Chief Compliance Officer at a $3 billion SEC-registered outsourced chief investment officer (OCIO) firm, where she institutionalized and enhanced the compliance program and brought the firm to full SEC examination readiness. Before that, she held senior compliance and operations leadership roles at UPS Investments Group, a $50B+ institutional pension fund, overseeing governance and due diligence across more than 200 investment managers. Earlier in her career, she supported enterprise-wide AML/BSA remediation following a DOJ consent order.</p>
+      <p>ComplyOn pairs senior-level judgment with a collaborative, scalable delivery model. Reema leads each engagement personally and works alongside clients' legal counsel, auditors, and administrators, drawing on trusted specialist partners and technology where a mandate calls for additional expertise or capacity. The aim is a long-term partnership: the right expertise, applied at the right scale, as each firm grows.</p>
       <ul class="chips">
-        <li>SEC Regulatory Compliance</li>
-        <li>AML / OFAC</li>
-        <li>ERISA / DOL</li>
-        <li>CAMS Candidate</li>
-        <li>GRC</li>
+        <li>SEC regulatory compliance</li>
+        <li>AML, OFAC &amp; financial crime</li>
+        <li>ERISA &amp; DOL advisory</li>
+        <li>Governance, risk &amp; controls</li>
       </ul>
     </div>
   </div>
@@ -754,45 +1067,45 @@
 
 <section id="services">
   <div class="wrap">
-    <p class="tag">What We Do</p>
-    <h2>Compliance services built for institutional complexity.</h2>
-    <p class="lead">From AML remediation and ERISA governance to contract review and digital asset frameworks, ComplyOn LLC delivers senior advisory across the full compliance lifecycle — with the depth of an in-house CCO and the flexibility of an independent consultant.</p>
+    <p class="tag">What we do</p>
+    <h2>Compliance services for institutional complexity.</h2>
+    <p class="lead">ComplyOn delivers senior advisory across the full compliance lifecycle — with the depth of an in-house CCO and the flexibility of an independent consultant.</p>
     <div class="grid g3" style="margin-top:2.5rem">
       <div class="box">
-        <h3>AML, OFAC &amp; Financial Crime</h3>
-        <p>Program design, gap assessments, transaction monitoring, OFAC screening frameworks, and enforcement action remediation support. Deep experience with DOJ BSA actions.</p>
-      </div>
-      <div class="box">
-        <h3>SEC Regulatory Compliance</h3>
+        <h3>SEC and state regulatory compliance</h3>
         <p>Examination readiness, Form ADV review, compliance program assessments, surveillance, conflicts of interest management, and regulatory filing support for registered advisers.</p>
       </div>
       <div class="box">
-        <h3>Marketing Rule &amp; Advertising Review</h3>
-        <p>Review of marketing materials, performance presentations, testimonials, and endorsements against SEC Rule 206(4)-1, including substantiation files and books-and-records support.</p>
+        <h3>AML, OFAC &amp; financial crime</h3>
+        <p>Program design, gap assessments, OFAC screening frameworks, and enforcement action remediation support.</p>
       </div>
       <div class="box">
-        <h3>Governance, Risk &amp; Controls</h3>
+        <h3>Operational due diligence</h3>
+        <p>ODD frameworks for OCIO platforms and institutional allocators overseeing external managers, covering custody, AML, valuation, and third-party risk across investment managers spanning public, private, illiquid, and offshore fund structures.</p>
+      </div>
+      <div class="box">
+        <h3>Contract review &amp; advisory</h3>
+        <p>Compliance-focused review of NDAs, investment management and sub-advisory agreements, custodian agreements, and LPAs — identifying regulatory risk and governance gaps before execution.</p>
+      </div>
+      <div class="box">
+        <h3>Governance, risk &amp; controls</h3>
         <p>Enterprise GRC framework design, board and committee governance review, cybersecurity policy development, control testing, escalation protocols, and board-level reporting infrastructure.</p>
       </div>
       <div class="box">
-        <h3>ERISA &amp; DOL Advisory</h3>
-        <p>Fiduciary compliance, prohibited transaction analysis, and operational due diligence frameworks for pension and institutional investment environments.</p>
+        <h3>ERISA &amp; DOL advisory</h3>
+        <p>Governance and fiduciary compliance, prohibited transaction analysis, and operational due diligence frameworks for pension and institutional investment environments.</p>
       </div>
       <div class="box">
-        <h3>Operational Due Diligence</h3>
-        <p>ODD frameworks across 100+ investment managers, covering custody, AML, valuation, and third-party risk for public, private, illiquid, and offshore fund structures.</p>
+        <h3>Fractional CCO services</h3>
+        <p>Dedicated compliance leadership on a part-time basis — program ownership, compliance training, and regulatory interface, scaled to the size and stage of your organization.</p>
       </div>
       <div class="box">
-        <h3>Fractional CCO Services</h3>
-        <p>Dedicated compliance leadership, program ownership, and regulatory interface on a part-time basis, tailored to the size and stage of your organization.</p>
+        <h3>Ongoing compliance support</h3>
+        <p>Recurring support alongside your existing team — compliance calendar management, annual review and risk assessment, and advice on new or amended regulations, at whatever cadence your firm needs.</p>
       </div>
       <div class="box">
-        <h3>Compliance Training &amp; Testing</h3>
-        <p>Annual and role-specific training for staff and supervised persons, code of ethics attestations, personal trading reviews, and periodic testing of controls against written policy.</p>
-      </div>
-      <div class="box">
-        <h3>Contract Review &amp; Advisory</h3>
-        <p>Compliance-focused review of NDAs, investment management agreements, sub-advisory agreements, custodian agreements, and limited partnership agreements — identifying regulatory risk, fiduciary obligations, and governance gaps before execution.</p>
+        <h3>Digital asset frameworks</h3>
+        <p>AML, custody, and safeguarding frameworks for investment advisers and funds with digital asset exposure, applying institutional compliance standards to requirements emerging under SEC, CFTC, and FinCEN rules and regulations.</p>
       </div>
     </div>
   </div>
@@ -800,122 +1113,106 @@
 
 <section class="experience" id="experience">
   <div class="wrap">
-    <p class="tag">Track Record</p>
-    <h2>A career built in the most demanding compliance environments.</h2>
-    <p class="lead">Reema Keen has led compliance programs from inception, registered broker-dealers with FINRA, navigated DOJ enforcement actions, and delivered zero-finding audit outcomes across institutional-grade environments.</p>
+    <p class="tag">Track record</p>
+    <h2>Programs built, examinations passed, findings avoided.</h2>
+    <p class="lead">Selected outcomes from sixteen years inside institutional compliance programs — the problems ComplyOn was built to solve for other firms.</p>
 
     <div class="timeline">
       <article class="job">
-        <p class="date">Feb 2023 — Jun 2025</p>
-        <h3>Managing Director &amp; Chief Compliance Officer</h3>
-        <p class="org">Disciplina Capital Management, LLC — Nashville, TN | SEC-registered OCIO, $3.5B AUM</p>
-        <ul>
-          <li>Institutionalized and significantly enhanced the firm's compliance program, establishing policies, controls, monitoring, and governance infrastructure befitting a mature institutional adviser</li>
-          <li>Led the firm's Form ADV review process and annual review audit</li>
-          <li>Coordinated custody audits and established the governance infrastructure and documentation standards necessary to bring the firm to full SEC examination readiness</li>
-          <li>Oversaw AML/OFAC compliance across 30+ accounts</li>
-          <li>Managed ongoing auditor-facing engagements</li>
-        </ul>
+        <p class="date">Disciplina Capital Management</p>
+        <h3>Institutionalized a compliance program and brought the firm to full SEC examination readiness.</h3>
+        <p class="org">SEC-registered OCIO, $3B AUM</p>
+        <p class="text">Institutionalized and significantly enhanced the firm's compliance infrastructure, establishing the policies, controls, monitoring, and governance expected of a mature institutional adviser. Led the Form ADV review process and the annual review audit, coordinated custody audits, and set the documentation standards that brought the firm to full SEC examination readiness.</p>
       </article>
       <article class="job">
-        <p class="date">Aug 2021 — Jan 2023</p>
-        <h3>Director, Investments Compliance &amp; Operations</h3>
-        <p class="org">UPS Investments Group — Atlanta, GA | $50B+ Institutional Pension Fund</p>
-        <ul>
-          <li>Owned enterprise-wide GRC, cybersecurity, and third-party risk frameworks</li>
-          <li>Implemented the Uncleared Margin Rules (UMR) collateral program to bring the corporate pension into compliance</li>
-          <li>Managed 200+ investment manager relationships across public, private, and offshore structures</li>
-          <li>Delivered multiple audits with zero findings</li>
-        </ul>
+        <p class="date">UPS Investments Group</p>
+        <h3>Eleven audits. Zero findings.</h3>
+        <p class="org">$50B+ institutional pension fund</p>
+        <p class="text">Supported eight internal and three external audits without a single finding, across governance, operational due diligence, cybersecurity, and third-party risk — the result of controls designed to be tested rather than defended after the fact.</p>
       </article>
       <article class="job">
-        <p class="date">Jan 2014 — Aug 2021</p>
-        <h3>Manager, Investments Compliance &amp; Operations</h3>
-        <p class="org">UPS Investments Group — Atlanta, GA</p>
-        <ul>
-          <li>Built compliance monitoring, ODD frameworks, and conflict-of-interest controls</li>
-          <li>Executed due diligence on 100+ investment managers</li>
-          <li>Supported 8 internal and 3 external audits with zero findings</li>
-        </ul>
+        <h3>Held 200+ external managers to one oversight standard.</h3>
+        <p class="org">Multi-manager oversight at scale</p>
+        <p class="text">Built and ran the due diligence, monitoring, and conflict-of-interest framework covering more than 200 investment managers across single-manager and multi-manager platforms, spanning public, private, illiquid, and offshore fund structures — the same problem OCIO platforms and allocators face today.</p>
       </article>
       <article class="job">
-        <p class="date">Dec 2011 — Sep 2013</p>
-        <h3>Compliance Officer</h3>
-        <p class="org">HSBC Securities Inc. — New York, NY | FINRA-registered Broker-Dealer</p>
-        <ul>
-          <li>Supported enterprise-wide remediation following a DOJ AML/BSA enforcement action</li>
-          <li>Delivered executive-level reporting on anti-bribery, sanctions, and staff dealing risk</li>
-          <li>Managed OFAC screening and risk escalation across customer and counterparty relationships</li>
-        </ul>
+        <h3>Brought a corporate pension into compliance with the Uncleared Margin Rules.</h3>
+        <p class="org">New regulation implementation</p>
+        <p class="text">Implemented the collateral program end to end — a worked example of translating a new rule into operational reality across custodians, counterparties, and internal teams.</p>
       </article>
       <article class="job">
-        <p class="date">Jan 2010 — Dec 2011</p>
-        <h3>Compliance Officer</h3>
-        <p class="org">Elara Securities Inc. — New York, NY | FINRA-registered Boutique Investment Bank</p>
-        <ul>
-          <li>Played a central role in registering the firm with FINRA</li>
-          <li>Advised investment staff on marketing of offshore fund structures (up to $500M AUM) to institutional investors via private placements under Regulation D and Regulation S</li>
-          <li>Amended U.S. disclosures, subscription agreements, and investor questionnaires</li>
-          <li>Prepared SEC and Blue Sky filings, and reviewed and approved corporate presentations for eight private placement transactions</li>
-          <li>Assisted the CCO and counsel in securing the firm's license to offer secondary debt and equity securities to U.S. institutional investors</li>
-        </ul>
+        <p class="date">HSBC Securities Inc.</p>
+        <h3>Remediated an AML/BSA program under a DOJ consent order.</h3>
+        <p class="org">Global broker-dealer under DOJ enforcement</p>
+        <p class="text">Supported enterprise-wide remediation following a Department of Justice enforcement action, managing OFAC screening and risk escalation across customer and counterparty relationships and delivering executive-level reporting on sanctions, anti-bribery, and staff dealing risk.</p>
+      </article>
+      <article class="job">
+        <p class="date">Elara Securities Inc.</p>
+        <h3>Registered a firm with FINRA and cleared it to transact with U.S. institutions.</h3>
+        <p class="org">Boutique investment bank, first-time registrant</p>
+        <p class="text">Played a central role in the firm's FINRA registration, prepared SEC and Blue Sky filings across eight private placement transactions, advised on marketing offshore fund structures under Regulation D and Regulation S, and helped secure the license to offer secondary debt and equity securities to U.S. institutional investors.</p>
       </article>
     </div>
   </div>
 </section>
 
-<section class="ind">
+<section class="ind" id="clients">
   <div class="wrap">
-    <p class="tag" style="text-align:center">Who We Serve</p>
-    <h2>Industries &amp; client types.</h2>
+    <p class="tag" style="text-align:center">Who we serve</p>
+    <h2>Firms where the regulatory stakes are highest.</h2>
+    <p class="lead" style="margin:0 auto">Engagements span institutional investors and the managers who serve them.</p>
     <div class="grid g3" style="margin-top:2.5rem">
-      <div class="box"><b>IA</b><strong>Investment Advisers</strong><p>SEC-registered RIAs, OCIO firms, hedge funds, and private equity managers</p></div>
-      <div class="box"><b>VC</b><strong>Venture Managers</strong><p>Emerging and established venture capital fund managers building institutional-grade compliance and governance infrastructure</p></div>
-      <div class="box"><b>PF</b><strong>Pension Funds</strong><p>Corporate and public pension funds navigating ERISA, DOL, and fiduciary requirements</p></div>
-      <div class="box"><b>EF</b><strong>Endowments &amp; Foundations</strong><p>Nonprofit and university investment pools balancing fiduciary duty, spending policy, and delegated manager oversight</p></div>
-      <div class="box"><b>OC</b><strong>OCIO Firms</strong><p>Outsourced Chief Investment Officer platforms managing multi-manager, institutional-scale portfolios</p></div>
-      <div class="box"><b>DA</b><strong>Digital Assets</strong><p>Firms building AML, custody, and governance infrastructure where institutional compliance expertise translates directly to digital asset regulatory requirements</p></div>
+      <div class="box"><b>IA</b><strong>Investment advisers</strong><p>SEC-registered RIAs, hedge funds, and private equity managers</p></div>
+      <div class="box"><b>OC</b><strong>OCIO firms</strong><p>Outsourced Chief Investment Officer platforms managing multi-manager, institutional-scale portfolios, where sub-adviser oversight and manager due diligence carry their own compliance demands</p></div>
+      <div class="box"><b>PF</b><strong>Pension funds</strong><p>Corporate and public pension funds navigating ERISA, DOL, and fiduciary requirements</p></div>
+      <div class="box"><b>EF</b><strong>Endowments &amp; foundations</strong><p>Nonprofit endowments and foundations navigating UPMIFA and prudent-investor governance standards</p></div>
+      <div class="box"><b>DA</b><strong>Digital asset managers &amp; funds</strong><p>Investment advisers and funds with digital asset exposure building AML, custody, and safeguarding frameworks aligned with SEC, CFTC, and FinCEN requirements</p></div>
+      <div class="box"><b>VC</b><strong>Venture &amp; emerging managers</strong><p>Emerging and established venture capital fund managers, including those backing digital asset and blockchain companies, building institutional-grade compliance programs and navigating regulatory change as they raise capital and grow</p></div>
     </div>
   </div>
 </section>
 
 <section id="engagements">
   <div class="wrap">
-    <p class="tag">How We Work Together</p>
+    <p class="tag">How we work together</p>
     <h2>Engagement models built around your stage.</h2>
+    <p class="lead">Every service area above can be delivered under any of these three models. Each engagement starts with a conversation about your firm, your regulators, and where the gaps actually sit; a proposal follows.</p>
     <div class="grid g3" style="margin-top:2.5rem">
       <div class="box">
         <p class="kicker">Outsourced</p>
         <h3>Fractional CCO</h3>
-        <p>Hand off day-to-day compliance ownership to a senior advisor, without adding headcount.</p>
+        <p>Hand off day-to-day compliance ownership to a senior advisor, without adding headcount (for selective engagements).</p>
         <ul>
           <li>Program ownership and regulatory interface</li>
           <li>Testing, remediation, and documentation</li>
+          <li>Employee reporting and training</li>
           <li>Form ADV, filings, and exam coordination</li>
         </ul>
-        <p class="fee">Monthly Retainer</p>
+        <p class="fee">Monthly retainer</p>
       </div>
       <div class="box">
         <p class="kicker">Ongoing</p>
-        <h3>Advisory Support</h3>
-        <p>Recurring support alongside your existing team — as much or as little as you need.</p>
+        <h3>Compliance support</h3>
+        <p>Recurring support alongside your existing team, as much or as little as you need.</p>
         <ul>
           <li>Compliance calendar management</li>
           <li>Annual review and risk assessment</li>
           <li>Advice on new or amended regulations</li>
         </ul>
-        <p class="fee">Monthly Retainer or Hourly</p>
+        <p class="fee">Monthly retainer or hourly</p>
       </div>
       <div class="box">
         <p class="kicker">Project</p>
-        <h3>Defined Engagements</h3>
-        <p>A specific compliance problem, scoped and solved, with documentation your team can run with.</p>
+        <h3>Defined engagements</h3>
+        <p>A specific compliance problem scoped and solved, with documentation your team can run with.</p>
         <ul>
           <li>Program builds and registration support</li>
           <li>Operational due diligence reviews</li>
-          <li>Contract review and mock exam prep</li>
+          <li>New regulation implementation</li>
+          <li>Contract review and framework design</li>
+          <li>Mock exams and SEC exam prep</li>
         </ul>
-        <p class="fee">Hourly or Flat Fee</p>
+        <p class="fee">Hourly or flat fee</p>
       </div>
     </div>
   </div>
@@ -923,12 +1220,12 @@
 
 <section id="faq">
   <div class="wrap">
-    <p class="tag">Common Questions</p>
+    <p class="tag">Common questions</p>
     <h2>Answers before we connect.</h2>
     <div class="faq">
       <details open>
         <summary>Do you provide compliance services for broker-dealers?</summary>
-        <p>No. ComplyOn LLC focuses exclusively on investment advisers, OCIOs, pension funds, and digital asset firms. While Reema's background includes broker-dealer compliance experience, ComplyOn does not currently offer broker-dealer compliance services.</p>
+        <p>No. ComplyOn focuses exclusively on investment advisers, OCIOs, pension funds, endowments and foundations, venture and emerging managers, and digital asset managers and funds. Reema's background includes broker-dealer compliance experience, but the firm does not currently offer broker-dealer compliance services.</p>
       </details>
       <details>
         <summary>Do regulators allow an outsourced or fractional Chief Compliance Officer?</summary>
@@ -939,12 +1236,20 @@
         <p>It depends on scope. Fractional CCO engagements are billed as a monthly retainer, ongoing support as a retainer or hourly rate, and project-based work as an hourly or flat fee. A proposal follows an initial conversation about your firm and needs.</p>
       </details>
       <details>
-        <summary>Do you work with firms that don't yet have an SEC-registered adviser or formal compliance program?</summary>
+        <summary>Do you work with firms that don't yet have a registered adviser or a formal compliance program?</summary>
         <p>Yes. ComplyOn supports firms building a compliance program from the ground up, including registration support, initial policy drafting, and governance infrastructure — as well as firms with mature programs seeking an experienced second set of eyes.</p>
       </details>
       <details>
         <summary>Can you support a firm with digital asset exposure?</summary>
-        <p>Yes. ComplyOn works with firms building AML, custody, and governance infrastructure for digital asset activities, applying institutional compliance frameworks developed across traditional financial services to the requirements emerging under SEC, FinCEN, and DOL oversight.</p>
+        <p>Yes. ComplyOn works with investment advisers and funds with digital asset exposure, building AML, custody, and safeguarding frameworks that apply institutional compliance standards to requirements emerging under SEC, CFTC, and FinCEN rules and regulations.</p>
+      </details>
+      <details>
+        <summary>How do you help firms keep pace with regulatory change?</summary>
+        <p>Through ongoing compliance support or a defined project, ComplyOn tracks new and amended rules relevant to your firm, assesses their impact on your program, and helps implement the policy, procedural, and operational changes they require — before an examination tests them.</p>
+      </details>
+      <details>
+        <summary>Do you work alongside other professionals?</summary>
+        <p>Yes. Reema leads each engagement personally and works alongside a client's legal counsel, auditors, fund administrators, and technology providers, bringing in trusted specialist partners where an engagement calls for additional expertise or capacity. ComplyOn provides compliance consulting and does not provide legal, tax, or investment advice.</p>
       </details>
     </div>
   </div>
@@ -953,9 +1258,9 @@
 <section id="contact">
   <div class="wrap contact-grid">
     <div>
-      <p class="tag">Get In Touch</p>
+      <p class="tag">Get in touch</p>
       <h2>Let's discuss your compliance needs.</h2>
-      <p class="lead" style="margin-bottom:2rem">Whether you need fractional CCO support, a compliance program assessment, or ongoing advisory services, ComplyOn LLC is ready to engage. All inquiries are handled with strict confidentiality.</p>
+      <p class="lead" style="margin-bottom:2rem">Whether you need fractional CCO support, a program assessment, or ongoing advisory, ComplyOn is ready to engage. All inquiries are handled with strict confidentiality.</p>
       <dl>
         <div class="detail">
           <div class="dot"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
@@ -968,6 +1273,10 @@
         <div class="detail">
           <div class="dot"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
           <div><dt>Location</dt><dd>Atlanta, Georgia</dd></div>
+        </div>
+        <div class="detail">
+          <div class="dot"><svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5.001A2.5 2.5 0 014.98 3.5zM2.4 21h5.16V9.5H2.4V21zm7.3-11.5V21h5.16v-6.36c0-3.36 4.36-3.63 4.36 0V21h5.16v-8.14c0-8.06-9.22-7.77-9.52-3.8V9.5H9.7z"/></svg></div>
+          <div><dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/reema-keen-57a8b77/" target="_blank" rel="noopener noreferrer">Reema Keen</a></dd></div>
         </div>
       </dl>
 
@@ -1004,15 +1313,15 @@
         <label for="area">Area of Interest</label>
         <select id="area" name="area">
           <option value="" disabled selected>Select a service area</option>
-          <option>AML / OFAC / Financial Crime</option>
-          <option>SEC Regulatory Compliance</option>
-          <option>ERISA / DOL Advisory</option>
-          <option>Fractional CCO Services</option>
-          <option>Governance, Risk &amp; Controls</option>
-          <option>Operational Due Diligence</option>
-          <option>Digital Assets Compliance</option>
-          <option>Contract Review &amp; Advisory</option>
-          <option>Other</option>
+          <option>AML / OFAC / financial crime</option>
+          <option>SEC regulatory compliance</option>
+          <option>ERISA / DOL advisory</option>
+          <option>Fractional CCO services</option>
+          <option>Governance, risk &amp; controls</option>
+          <option>Operational due diligence</option>
+          <option>Digital asset compliance</option>
+          <option>Contract review &amp; advisory</option>
+          <option>Something else</option>
         </select>
       </div>
       <div class="field">
@@ -1025,21 +1334,79 @@
   </div>
 </section>
 
+</main>
+
 <footer>
   <div class="wrap">
     <a class="logo" href="#top">COMPLY<span>ON</span></a>
-    <nav>
+    <nav aria-label="Footer">
       <ul>
         <li><a href="#about">About</a></li>
         <li><a href="#services">Services</a></li>
-        <li><a href="#experience">Experience</a></li>
-        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#clients">Who we serve</a></li>
+        <li><a href="#experience">Track record</a></li>
+        <li><a href="#faq">Questions</a></li>
         <li><a href="#contact">Contact</a></li>
+        <li><a href="https://www.linkedin.com/in/reema-keen-57a8b77/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
       </ul>
     </nav>
-    <div class="credit"><a href="https://www.ark-am.com" target="_blank" rel="noopener">&copy; 2026 Ark-am LLC</a></div>
+    <div class="credit">
+      &copy; 2026 ComplyOn LLC. Atlanta, Georgia. All rights reserved. &middot;
+      <a href="https://www.ark-am.com" target="_blank" rel="noopener">Ark-am LLC</a>
+    </div>
   </div>
 </footer>
+
+<script>
+  /* Phone menu. Deliberately separate from the animation script below, and
+     it never bails out: that script returns early when the visitor prefers
+     reduced motion, and the menu still has to work for those visitors. */
+  (function () {
+    var root = document.documentElement;
+    var header = document.querySelector('header');
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.getElementById('primary-nav');
+    if (!header || !toggle || !nav) return;
+
+    /* Only now do the collapsed styles apply, so a failed script leaves the
+       full nav visible rather than a button wired to nothing. */
+    root.className += ' has-js';
+
+    function setOpen(open) {
+      header.classList.toggle('nav-open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    }
+
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setOpen(!header.classList.contains('nav-open'));
+    });
+
+    /* Tapping a link navigates, so the panel should get out of the way. */
+    nav.addEventListener('click', function (e) {
+      if (e.target.closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && header.classList.contains('nav-open')) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    document.addEventListener('click', function (e) {
+      if (header.classList.contains('nav-open') && !header.contains(e.target)) setOpen(false);
+    });
+
+    /* Rotating to landscape can cross the breakpoint while the panel is open,
+       which would otherwise leave .nav-open stuck on the desktop bar. */
+    var wide = window.matchMedia('(min-width: 640px)');
+    var onChange = function (e) { if (e.matches) setOpen(false); };
+    if (wide.addEventListener) wide.addEventListener('change', onChange);
+    else if (wide.addListener) wide.addListener(onChange);
+  })();
+</script>
 
 <script>
   /* Progressive enhancement: everything below is optional polish. The page

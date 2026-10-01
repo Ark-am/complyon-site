@@ -23,30 +23,29 @@
      @fontsource, see README). No request leaves this origin to render the
      page. The two faces used above the fold are preloaded; the rest resolve
      from the @font-face rules in the stylesheet below. -->
-<link rel="preload" href="fonts/newsreader-latin-200-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/newsreader-latin-opsz-200-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
   /* ---------- fonts ----------
-     Weights match what the stylesheet actually asks for: Newsreader 200/300/400,
+     Newsreader is the variable font with an optical-size (opsz) axis, as the
+     original design loaded it from Google Fonts: browsers pick the display
+     cut for large headings and the text cut for small type automatically.
+     Its weight axis is trimmed to 200-700, the range the stylesheet uses.
      Inter 300/400/500. font-display:swap renders in the fallback face
      immediately rather than holding the text blank. */
   @font-face {
     font-family: 'Newsreader';
-    font-style: normal; font-weight: 200; font-display: swap;
-    src: url('fonts/newsreader-latin-200-normal.woff2') format('woff2');
+    font-style: normal; font-weight: 200 700; font-display: swap;
+    src: url('fonts/newsreader-latin-opsz-200-700.woff2') format('woff2');
     unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
   }
+  /* Newsreader draws $ with two strokes. The stat figures borrow a
+     single-stroke $ from Source Serif 4, subset to that one glyph. */
   @font-face {
-    font-family: 'Newsreader';
-    font-style: normal; font-weight: 300; font-display: swap;
-    src: url('fonts/newsreader-latin-300-normal.woff2') format('woff2');
-    unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-  }
-  @font-face {
-    font-family: 'Newsreader';
+    font-family: 'Stat Dollar';
     font-style: normal; font-weight: 400; font-display: swap;
-    src: url('fonts/newsreader-latin-400-normal.woff2') format('woff2');
-    unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+    src: url('fonts/source-serif-4-dollar-400.woff2') format('woff2');
+    unicode-range: U+0024;
   }
   @font-face {
     font-family: 'Inter';
@@ -250,7 +249,7 @@
   .hero-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; }
   .hero h1 {
     font-size: clamp(2.1rem, 6.4vw, 5.2rem);
-    font-weight: 200; line-height: 1.05; letter-spacing: -0.025em;
+    font-weight: 400; line-height: 1.05; letter-spacing: -0.025em;
     max-width: 17ch; margin-bottom: 2.2rem;
   }
   .hero-body {
@@ -271,9 +270,9 @@
   .stat { padding: 2.6rem 0 0; }
   .stat + .stat { border-left: 1px solid var(--line); padding-left: clamp(1.2rem, 4vw, 3rem); }
   .stat-num {
-    font-family: var(--serif); font-weight: 200;
+    font-family: 'Stat Dollar', var(--serif); font-weight: 400;
     font-size: clamp(2.4rem, 5.5vw, 4.2rem); line-height: 1;
-    color: var(--purple); letter-spacing: -0.03em;
+    color: var(--purple-deep); letter-spacing: -0.01em;
   }
   .stat-label { margin-top: 0.9rem; font-size: 0.86rem; color: var(--muted); max-width: 22ch; }
   .stats-note { margin-top: 1.8rem; font-size: 0.76rem; color: #6f6a7d; }
@@ -296,6 +295,7 @@
   }
   .portrait-name { font-family: var(--serif); font-size: 1.35rem; color: var(--ink); }
   .portrait-role { font-size: 0.85rem; color: var(--muted); margin-top: 0.25rem; }
+  .about-text .s-title, #clients .s-title, #experience .s-title, #engagements .s-title, #faq .s-title { font-weight: 400; }
   .about-text p { margin-bottom: 1.35rem; color: var(--muted); max-width: 68ch; }
   .about-text p:last-of-type { margin-bottom: 0; }
   .creds-k { margin-top: 2.8rem; font-size: 0.78rem; color: var(--muted); }
@@ -791,7 +791,7 @@
             "itemOffered": {
               "@type": "Service",
               "name": "Governance, risk & controls",
-              "description": "Enterprise GRC framework design, board and committee governance review, cybersecurity policy development, control testing, escalation protocols, and board-level reporting infrastructure."
+              "description": "Enterprise GRC framework design, board and committee governance review, cybersecurity policy development, control testing, and board-level reporting — including AI governance: use inventories, acceptable use policies, AI vendor due diligence, and review of AI-related disclosures."
             }
           },
           {
@@ -898,6 +898,22 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Through ongoing compliance support or a defined project, ComplyOn tracks new and amended rules relevant to your firm, assesses their impact on your program, and helps implement the policy, procedural, and operational changes they require — before an examination tests them."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you help firms govern their use of AI?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, as part of ComplyOn's governance, risk and controls work. That includes inventorying how AI tools are used across the firm, drafting acceptable use policies, conducting due diligence on AI vendors, reviewing Form ADV and marketing materials so AI-related claims match actual practice, addressing supervision and recordkeeping for AI-generated communications and meeting note-takers, and training staff. How advisers supervise their use of AI, and whether their representations about it are accurate, is a current focus of SEC examinations."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you use AI tools in your own work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, selectively and with safeguards. ComplyOn uses enterprise-grade AI tools to work more efficiently, does not enter client confidential information into consumer or public AI tools without the client's consent, and reviews all work product personally. Responsibility for every deliverable rests with Reema, not with a tool."
           }
         },
         {
@@ -1057,7 +1073,7 @@
         <article class="svc">
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2.5" y="3.5" width="19" height="13" rx="1.5"/><path d="M8.5 21h7M12 16.5V21"/></svg>
           <h3>Governance, risk &amp; controls</h3>
-          <p>Enterprise GRC framework design, board and committee governance review, cybersecurity policy development, control testing, escalation protocols, and board-level reporting infrastructure.</p>
+          <p>Enterprise GRC framework design, board and committee governance review, cybersecurity policy development, control testing, and board-level reporting — including AI governance: use inventories, acceptable use policies, AI vendor due diligence, and review of AI-related disclosures.</p>
         </article>
         <article class="svc">
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
@@ -1279,6 +1295,14 @@
           <div class="faq-a">Through ongoing compliance support or a defined project, ComplyOn tracks new and amended rules relevant to your firm, assesses their impact on your program, and helps implement the policy, procedural, and operational changes they require — before an examination tests them.</div>
         </details>
         <details>
+          <summary>Do you help firms govern their use of AI?<span class="chev"></span></summary>
+          <div class="faq-a">Yes, as part of ComplyOn's governance, risk and controls work. That includes inventorying how AI tools are used across the firm, drafting acceptable use policies, conducting due diligence on AI vendors, reviewing Form ADV and marketing materials so AI-related claims match actual practice, addressing supervision and recordkeeping for AI-generated communications and meeting note-takers, and training staff. How advisers supervise their use of AI, and whether their representations about it are accurate, is a current focus of SEC examinations.</div>
+        </details>
+        <details>
+          <summary>Do you use AI tools in your own work?<span class="chev"></span></summary>
+          <div class="faq-a">Yes, selectively and with safeguards. ComplyOn uses enterprise-grade AI tools to work more efficiently, does not enter client confidential information into consumer or public AI tools without the client's consent, and reviews all work product personally. Responsibility for every deliverable rests with Reema, not with a tool.</div>
+        </details>
+        <details>
           <summary>Do you work alongside other professionals?<span class="chev"></span></summary>
           <div class="faq-a">Yes. Reema leads each engagement personally and works alongside a client's legal counsel, auditors, fund administrators, and technology providers, bringing in trusted specialist partners where an engagement calls for additional expertise or capacity. ComplyOn provides compliance consulting and does not provide legal, tax, or investment advice.</div>
         </details>
@@ -1328,6 +1352,7 @@
               <option>ERISA / DOL advisory</option>
               <option>Fractional CCO services</option>
               <option>Governance, risk &amp; controls</option>
+              <option>AI governance</option>
               <option>Operational due diligence</option>
               <option>Digital asset compliance</option>
               <option>Contract review &amp; advisory</option>

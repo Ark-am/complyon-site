@@ -59,21 +59,43 @@ render-blocking round trip to `fonts.googleapis.com` and avoids sending
 visitor IP addresses to Google — the practice German courts have found to
 breach GDPR.
 
-The files come from the `@fontsource/*` packages, kept as devDependencies so
+The files come from the `@fontsource*` packages, kept as devDependencies so
 the origin is traceable and updates are a reinstall away. They are not
 imported at build time; the `.woff2` files were copied into `fonts/` and are
 committed, because GitHub Pages serves this repo's root and never runs the
 build.
 
-Only what the stylesheet asks for is shipped — Newsreader 200/300/400, Inter
-300/400/500, latin subset, woff2 only — six files totalling ~140 kB. To add
-a weight: copy the matching file out of `node_modules/@fontsource/<family>/
-files/`, then add an `@font-face` rule in the stylesheet.
+Newsreader is the **variable** font with an optical-size axis (`opsz`
+6–72), the same version the original design loaded from Google Fonts.
+Browsers apply `font-optical-sizing: auto` by default, so large text such as
+the hero headline gets the high-contrast display cut and small text gets the
+sturdier text cut. (The static `@fontsource/newsreader` files are fixed at
+the 16pt cut, which makes the big headings look heavier and blunter.)
+`fonts/newsreader-latin-opsz-200-700.woff2` (~128 kB) is
+`@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2`
+with its weight axis trimmed to 200–700, the range the stylesheet uses:
 
-The two faces used above the fold (Newsreader 200 for the headline, Inter
-400 for body text) are preloaded in the head; the rest load from the
-`@font-face` rules. All six declare `font-display: swap`, so text paints
-immediately in the fallback face rather than staying invisible.
+```bash
+python -c "from fontTools.ttLib import TTFont; from fontTools.varLib.instancer import instantiateVariableFont as i; f=i(TTFont('node_modules/@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2'), {'wght': (200, 400, 700)}); f.flavor='woff2'; f.save('fonts/newsreader-latin-opsz-200-700.woff2')"
+```
+
+Inter ships as static 300/400/500 files (latin subset, woff2). To add an
+Inter weight: copy the matching file out of `node_modules/@fontsource/inter/
+files/`, then add an `@font-face` rule in the stylesheet. To use a Newsreader
+weight above 700, rebuild the variable file with a wider `wght` range.
+
+The Newsreader file and Inter 400 (body text) are preloaded in the head; the
+rest load from the `@font-face` rules. All declare `font-display: swap`, so
+text paints immediately in the fallback face rather than staying invisible.
+
+Newsreader's `$` has two vertical strokes. The stats band (`.stat-num`)
+uses a single-stroke `$` instead: `fonts/source-serif-4-dollar-400.woff2`
+is Source Serif 4 (SIL OFL) subset to that one glyph (under 1 kB), loaded
+as the `Stat Dollar` family with `unicode-range: U+0024`, so every other
+character still falls through to Newsreader. To rebuild it, run
+`pyftsubset` (from fonttools) on
+`@fontsource/source-serif-4/files/source-serif-4-latin-400-normal.woff2`
+with `--unicodes=U+0024 --flavor=woff2`.
 
 ## Responsive design
 

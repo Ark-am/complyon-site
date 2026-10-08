@@ -4,3 +4,7 @@ dist/
 *.log
 .vite/
 .lighthouseci/
+/server/complyonServer.js
+.env
+.env.*
+!.env.example

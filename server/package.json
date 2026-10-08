@@ -1,0 +1,29 @@
+{
+  "name": "complyon-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prestart": "test -f complyonServer.js || npm run bundle",
+    "start": "node complyonServer.js",
+    "dev": "node --watch index.js",
+    "test": "node --test",
+    "bundle": "esbuild index.js --bundle --platform=node --packages=external --format=esm --target=node20 --outfile=complyonServer.js",
+    "deploy": "npm run bundle && ssh root@192.241.130.139 'mkdir -p /root/complyon-backend' && scp complyonServer.js package.json package-lock.json .env root@192.241.130.139:/root/complyon-backend/"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-ses": "^3.1146.0",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.0",
+    "nodemailer": "^10.0.15"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "supertest": "^7.3.1"
+  }
+}
